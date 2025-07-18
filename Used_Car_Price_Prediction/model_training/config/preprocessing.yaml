@@ -1,0 +1,31 @@
+# Preprocessing configuration
+preprocessing:
+  # train-test split
+  test_size: 0.2
+  random_state: 42
+
+  # feature engineering
+  fillna_column: service_history
+  car_age_column: car_age
+  accident_flag_column: has_accident
+  service_history_mapping:
+    "None": 0
+    "Partial": 1
+    "Full": 2
+
+  # categorical columns for encoding
+  categorical_columns:
+    - fuel_type
+    - brand
+    - transmission
+    - color
+    - insurance_valid
+
+  # Columns to drop
+  drop_columns:
+    - make_year
+    - fuel_type
+    - brand
+    - transmission
+    - color
+    - insurance_valid

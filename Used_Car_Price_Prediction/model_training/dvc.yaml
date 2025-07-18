@@ -1,0 +1,53 @@
+stages:
+  data_preprocessing:
+    cmd: python src/data_preprocessing.py
+    deps:
+      - src/data_preprocessing.py
+      - data/used_car_price_dataset_extended.csv
+      - config/config.yaml
+      - config/preprocessing.yaml
+      - config/feature_selection.yaml
+    outs:
+      - data/processed/preprocessed_data.csv
+      - data/processed/train.csv
+      - data/processed/test.csv
+      - data/processed/selected_features.pkl
+    params:
+      - preprocessing
+      - current_year
+    metrics:
+      - logs/preprocessing_metrics.json
+
+  training:
+    cmd: python src/training.py
+    deps:
+      - src/training.py
+      - data/processed/train.csv
+      - data/processed/selected_features.pkl
+      - config/config.yaml
+      - config/training.yaml
+    outs:
+      - models/linear_reg_model.pkl
+      - models/best_params.json
+    params:
+      - training
+    metrics:
+      - logs/training_metrics.json:
+          cache: false
+
+  evaluation:
+    cmd: python src/evaluation.py
+    deps:
+      - src/evaluation.py
+      - data/processed/test.csv
+      - data/processed/selected_features.pkl
+      - models/linear_reg_model.pkl
+      - config/config.yaml
+      - config/evaluation.yaml
+    outs:
+      - plots/
+    params:
+      - evaluation
+    metrics:
+      - logs/evaluation_metrics.json:
+          cache: false

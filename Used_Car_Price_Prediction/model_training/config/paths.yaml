@@ -1,0 +1,10 @@
+data:
+  raw_data_path: "data/used_car_price_dataset_extended.csv"
+  processed_data_path: "data/processed"
+  train_data_path: "data/processed/train.csv"
+  test_data_path: "data/processed/test.csv"
+
+# model path
+model:
+  save_path: "models/"
+  model_name: "lr_model.pkl"

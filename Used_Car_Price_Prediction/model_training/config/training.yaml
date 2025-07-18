@@ -1,0 +1,3 @@
+train:
+  model_type: "Linear_regression"
+  target_column: "price_usd"

@@ -1,0 +1,23 @@
+evaluation:
+  metrics:
+    - "r2_score"
+    - "mean_absolute_error"
+    - "mean_squared_error"
+    - "root_mean_squared_error"
+    - "mean_absolute_percentage_error"
+  save_metrics_path: "metrics.json"
+  # Visualization settings
+  plots:
+    save_plots: true
+    plot_dir: "plots/"
+    plot_formats: ["png", "pdf"]
+    # Specific plots to generate
+    residual_plot: true
+    prediction_vs_actual: true
+    qq_plot: true
+
+  # Cross validation settings
+  cross_validation:
+    enabled: true
+    cv_folds: 5
+    scoring: "r2"

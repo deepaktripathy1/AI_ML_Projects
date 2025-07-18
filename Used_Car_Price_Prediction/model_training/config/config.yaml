@@ -1,0 +1,26 @@
+defaults:
+  - paths: paths
+  - preprocessing: preprocessing
+  - feature_selection: feature_selection
+  - training: training
+  - evaluation: evaluation
+  - override hydra/job_logging: disabled
+
+# Project Settings
+project_name: "used_car_price_prediction"
+random_seed: 42
+current_year: 2025
+
+# Logging
+logging:
+  level: "INFO"
+  log_dir: "logs/"
+
+# MLflow
+mlflow:
+  experiment_name: "used_car_price_prediction"
+  tracking_uri: "http://127.0.0.1:5000"
+
+# DVC
+dvc:
+  enable: True

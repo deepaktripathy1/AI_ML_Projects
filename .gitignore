@@ -1,0 +1,62 @@
+# ----------------------------------------
+# Python artifacts
+# ----------------------------------------
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# ----------------------------------------
+# Environment and IDE configs
+# ----------------------------------------
+.env
+.venv/
+env/
+venv/
+.vscode/
+.idea/
+
+# ----------------------------------------
+# DVC-related temporary/cache files
+# ----------------------------------------
+.dvc/cache/
+.dvc/tmp/
+.dvc/lock
+used_car_price_prediction/model_training/data/
+!used_car_price_prediction/model_training/data/*.csv
+used_car_price_prediction/model_training/metrics.json
+
+# ----------------------------------------
+# ML model artifacts
+# ----------------------------------------
+*.pkl
+*.joblib
+*.h5
+*.onnx
+*.pt
+*.model
+models/
+used_car_price_prediction/model_training/models/
+
+# ----------------------------------------
+# Logs and outputs
+# ----------------------------------------
+logs/
+*.log
+hydra_output/
+used_car_price_prediction/model_training/logs/
+used_car_price_prediction/model_training/hydra_output/
+
+# ----------------------------------------
+# Jupyter notebook metadata
+# ----------------------------------------
+.ipynb_checkpoints/
+
+# ----------------------------------------
+# OS metadata
+# ----------------------------------------
+.DS_Store
+Thumbs.db

@@ -1,0 +1,7 @@
+feature_selection:
+  method: "rfecv"
+  estimator: "linear_regression"
+  step: 1
+  cv_folds: 5
+  scoring: "r2"
+  min_features_to_select: 5
