@@ -171,27 +171,6 @@ git-auto:
 	$(MAKE) git-commit MSG="$$MSG"
 	$(MAKE) git-push
 
-# === Data preprocessing pipeline ===
-.PHONY: preprocess
-preprocess: check-venv start-mlflow
-	@printf "\n$(BLUE)Running data preprocessing...$(NC)"
-	$(PYTHON_VENV) -m src.data_preprocessing
-	@printf "$(GREEN)Preprocessing completed$(NC)"
-
-# === Train model pipeline ===
-.PHONY: train
-train: check-venv start-mlflow
-	@printf "$\n(BLUE)Starting training pipeline...$(NC)"
-	$(PYTHON_VENV) -m src.training
-	@printf "$(GREEN)Training completed$(NC)"
-
-# === Evaluate model pipeline ===
-.PHONY: evaluate
-evaluate: check-venv start-mlflow
-	@printf "\n$(BLUE)Running model evaluation...$(NC)"
-	$(PYTHON_VENV) -m src.evaluation
-	@printf "$(GREEN)Evaluation completed$(NC)"
-
 # Clean generated files
 .PHONY: clean
 clean:
@@ -239,43 +218,38 @@ setup: create-venv install-requirements start-mlflow
 help:
 	@printf "$(BLUE)Used Car Price Prediction - ML Pipeline Makefile$(NC)"
 	@echo ""
-	@printf "$(YELLOW)Main Commands:$(NC)"
-	@printf "  $(GREEN)make all\033[0m           - Run full pipeline (env check + MLflow + DVC)\n"
-	@printf "  $(GREEN)make setup\033[0m         - Initial development environment setup\n"
-	@printf "  $(GREEN)make pipeline\033[0m      - Run DVC pipeline with MLflow tracking\n"
+	@printf "$(YELLOW)Main Commands:$(NC)\n"
+	@printf "  $(GREEN)make all$(NC)                      - Run full pipeline (env check + MLflow + DVC)\n"
+	@printf "  $(GREEN)make setup$(NC)                    - Initial development environment setup\n"
+	@printf "  $(GREEN)make pipeline$(NC)                 - Run DVC pipeline with MLflow tracking\n"
 	@echo ""
-	@printf "$(YELLOW)Environment:$(NC)"
-	@printf "  $(GREEN)make check-venv\033[0m    - Check if virtual environment exists\n"
-	@printf "  $(GREEN)make create-venv\033[0m   - Create virtual environment and install deps\n"
-	@printf "  $(GREEN)make install\033[0m       - Install/update requirements\n"
-	@printf "  $(GREEN)make activate\033[0m      - Show activation command\n"
+	@printf "$(YELLOW)Environment:$(NC)\n"
+	@printf "  $(GREEN)make check-venv$(NC)               - Check if virtual environment exists\n"
+	@printf "  $(GREEN)make create-venv$(NC)              - Create virtual environment and install deps\n"
+	@printf "  $(GREEN)make install-requirements$(NC)     - Install/update requirements\n"
+	@printf "  $(GREEN)make activate-venv$(NC)            - Show activation command\n"
 	@echo ""
-	@printf "$(YELLOW)MLflow:$(NC)"
-	@printf "  $(GREEN)make mlflow-start\033[0m  - Start MLflow server (port $(MLFLOW_PORT))\n"
-	@printf "  $(GREEN)make mlflow-stop\033[0m   - Stop MLflow server\n"
-	@printf "  $(GREEN)make check-mlflow\033[0m  - Check MLflow server status\n"
+	@printf "$(YELLOW)MLflow:$(NC)\n"
+	@printf "  $(GREEN)make start-mlflow$(NC)             - Start MLflow server (port $(MLFLOW_PORT))\n"
+	@printf "  $(GREEN)make stop-mlflow$(NC)              - Stop MLflow server\n"
+	@printf "  $(GREEN)make check-mlflow$(NC)             - Check MLflow server status\n"
 	@echo ""
-	@printf "$(YELLOW)DVC Pipeline:$(NC)"
-	@printf "  $(GREEN)make dvc-repro\033[0m     - Run DVC pipeline reproduction\n"
-	@printf "  $(GREEN)make dvc-status\033[0m    - Check DVC pipeline status\n"
-	@printf "  $(GREEN)make dvc-metrics\033[0m   - Show DVC metrics\n"
-	@printf "  $(GREEN)make dvc-clean\033[0m     - Clean DVC cache\n"
+	@printf "$(YELLOW)DVC Pipeline:$(NC)\n"
+	@printf "  $(GREEN)make dvc-repro$(NC)                - Run DVC pipeline reproduction\n"
+	@printf "  $(GREEN)make dvc-status$(NC)               - Check DVC pipeline status\n"
+	@printf "  $(GREEN)make dvc-metrics$(NC)              - Show DVC metrics\n"
+	@printf "  $(GREEN)make dvc-clean$(NC)                - Clean DVC cache\n"
 	@echo ""
-	@printf "$(YELLOW)Individual Steps:$(NC)"
-	@printf "  $(GREEN)make preprocess\033[0m    - Run data preprocessing\n"
-	@printf "  $(GREEN)make train\033[0m         - Run model training\n"
-	@printf "  $(GREEN)make evaluate\033[0m      - Run model evaluation\n"
+	@printf "$(YELLOW)Git Operations:$(NC)\n"
+	@printf "  $(GREEN)make git-status$(NC)               - Show git status\n"
+	@printf "  $(GREEN)make git-commit MSG='message'$(NC) - Commit with message\n"
+	@printf "  $(GREEN)make git-push$(NC)                 - Push to remote\n"
+	@printf "  $(GREEN)make git-auto$(NC)                 - Auto commit and push\n"
 	@echo ""
-	@printf "$(YELLOW)Git Operations:$(NC)"
-	@printf "  $(GREEN)make git-status\033[0m    - Show git status\n"
-	@printf "  $(GREEN)make git-commit MSG='message'\033[0m - Commit with message\n"
-	@printf "  $(GREEN)make git-push\033[0m      - Push to remote\n"
-	@printf "  $(GREEN)make git-auto\033[0m      - Auto commit and push\n"
+	@printf "$(YELLOW)Cleanup:$(NC)\n"
+	@printf "  $(GREEN)make clean$(NC)                    - Clean Python cache and logs\n"
+	@printf "  $(GREEN)make clean-all$(NC)                - Deep clean (models, cache, MLflow)\n"
 	@echo ""
-	@printf "$(YELLOW)Cleanup:$(NC)"
-	@printf "  $(GREEN)make clean\033[0m         - Clean Python cache and logs\n"
-	@printf "  $(GREEN)make clean-all\033[0m     - Deep clean (models, cache, MLflow)\n"
-	@echo ""
-	@printf "$(BLUE)Examples:$(NC)"
+	@printf "$(BLUE)Examples:$(NC)\n"
 	@echo "  make git-commit MSG='Updated feature engineering'"
 	@echo "  make git-auto MSG='Pipeline improvements'"
