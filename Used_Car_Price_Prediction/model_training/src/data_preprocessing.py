@@ -8,9 +8,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold
 from sklearn.feature_selection import RFECV
 import hydra
-from omegaconf import DictConfig
+from omegaconf import DictConfig, OmegaConf
 import mlflow
 import mlflow.sklearn
+
 
 from utils import (setup_logging, setup_mlflow_experiment, save_json,
                    save_pickle, print_data_info, create_directories,
@@ -25,7 +26,7 @@ class DataPreprocessor:
         self.current_year = config.current_year
         self.feature_names = None
 
-    def load_data(self, filepath: str) -> pd.DataFrame:  # type: ignore
+    def load_data(self, filepath: str) -> pd.DataFrame:
         """Load data from CSV file."""
         try:
             df = pd.read_csv(filepath)
@@ -36,7 +37,7 @@ class DataPreprocessor:
             logging.error(f"Error loading data: {e}")
             raise
 
-    def handle_missing_values(self, df: pd.DataFrame) -> pd.DataFrame:  # type: ignore
+    def handle_missing_values(self, df: pd.DataFrame) -> pd.DataFrame:
         """Handle missing values in the dataset"""
         df = df.copy()
 
@@ -48,7 +49,7 @@ class DataPreprocessor:
 
         return df
 
-    def create_new_features(self, df: pd.DataFrame) -> pd.DataFrame:  # type: ignore
+    def create_new_features(self, df: pd.DataFrame) -> pd.DataFrame:
         """Create new features from existing ones"""
         df = df.copy()
 
@@ -63,7 +64,7 @@ class DataPreprocessor:
 
         return df
 
-    def encode_cat_features(self, df: pd.DataFrame) -> pd.DataFrame:  # type: ignore
+    def encode_cat_features(self, df: pd.DataFrame) -> pd.DataFrame:
         """Encode categorical features"""
         df = df.copy()
 
@@ -83,12 +84,17 @@ class DataPreprocessor:
 
         return df_final
 
-    def drop_unnecessary_cols(self, df: pd.DataFrame) -> pd.DataFrame:  # type: ignore
+    def drop_unnecessary_cols(self, df: pd.DataFrame) -> pd.DataFrame:
         """Drop unnecessary columns."""
         df = df.copy()
 
         cols_to_drop = self.config.preprocessing.drop_columns
         df = df.drop(columns=cols_to_drop, errors="ignore")
+
+        # Export final dataframe to csv
+        filename = "preprocessed_data.csv"
+        df.to_csv(os.path.join(self.config.data.processed_data_path, filename),
+                  index=False)
 
         logging.info(f"Dropped columns: {cols_to_drop}")
 
@@ -96,9 +102,9 @@ class DataPreprocessor:
 
     def perform_feat_selection(self,
                                X: pd.DataFrame,
-                               y: pd.Series) -> Tuple[pd.DataFrame, List[str]]:  # type: ignore
+                               y: pd.Series) -> Tuple[pd.DataFrame, List[str]]:
         """Perform feature selection using RFECV."""
-        fs_config = self.config.feature_selection.feature_selection
+        fs_config = self.config.feature_selection
         if fs_config.method == "rfecv":
             estimator = LinearRegression()
             cv = KFold(n_splits=fs_config.cv_folds,
@@ -136,7 +142,7 @@ class DataPreprocessor:
             return X, X.columns.tolist()
 
     def split_data(self, df: pd.DataFrame,
-                   target_col: str) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:  # type: ignore
+                   target_col: str) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
         """Split data into train and test sets."""
         X = df.drop(columns=[target_col])
         y = df[target_col]
@@ -154,7 +160,7 @@ class DataPreprocessor:
         return X_train, X_test, y_train, y_test
 
     def preprocess_pipeline(self, df: pd.DataFrame,
-                            target_col: str) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:  # type: ignore
+                            target_col: str) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
         """Data Pre-processing Pipeline."""
         # Handle missing values
         df = self.handle_missing_values(df=df)
@@ -188,7 +194,7 @@ class DataPreprocessor:
                             y_train: pd.Series, y_test: pd.Series) -> None:
         """Save processed data to files."""
         # Create processed data directory
-        processed_dir = self.config.paths.processed_data_path
+        processed_dir = self.config.data.processed_data_path
         create_directories(directories=[processed_dir])
 
         # Combine features and target for saving
@@ -196,8 +202,8 @@ class DataPreprocessor:
         test_data = pd.concat([X_test, y_test], axis=1)
 
         # Save data
-        train_data.to_csv(self.config.paths.train_data_path, index=False)
-        test_data.to_csv(self.config.paths.test_data_path, index=False)
+        train_data.to_csv(self.config.data.train_data_path, index=False)
+        test_data.to_csv(self.config.data.test_data_path, index=False)
 
         # Save feature names
         save_pickle(self.feature_names, os.path.join(
@@ -209,7 +215,7 @@ class DataPreprocessor:
         metrics = {
             "train_samples": len(X_train),
             "test_samples": len(X_test),
-            "n_features": len(self.feature_names),  # type: ignore
+            "n_features": len(self.feature_names) if self.feature_names is not None else 0,
             "train_target_mean": y_train.mean(),
             "train_target_std": y_train.std(),
             "test_target_mean": y_test.mean(),
@@ -220,7 +226,7 @@ class DataPreprocessor:
         log_metrics_to_mlflow(metrics=metrics)
 
 
-@hydra.main(version_base=None, config_path="./config", config_name="config")
+@hydra.main(version_base=None, config_path="../config", config_name="config")
 def main(cfg: DictConfig) -> None:
     """Main preprocessing function."""
     # Set up logging
@@ -236,14 +242,14 @@ def main(cfg: DictConfig) -> None:
             "current_year": cfg.current_year,
             "test_size": cfg.preprocessing.test_size,
             "random_state": cfg.preprocessing.random_state,
-            "feature_selection_method": cfg.feature_selection.feature_selection.method
+            "feature_selection_method": cfg.feature_selection.method
         })
 
         # Initialize preprocessor
         preprocessor = DataPreprocessor(cfg)
 
         # Load data
-        df = preprocessor.load_data(cfg.paths.raw_data_path)
+        df = preprocessor.load_data(cfg.data.raw_data_path)
 
         # Target column
         target_col = "price_usd"

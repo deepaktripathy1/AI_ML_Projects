@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/449803624013044498/3a29ed9abdec4d97a729e4c5a0f67c5e/artifacts
+end_time: 1753273329494
+entry_point_name: ''
+experiment_id: '449803624013044498'
+lifecycle_stage: active
+run_id: 3a29ed9abdec4d97a729e4c5a0f67c5e
+run_name: data_preprocessing
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1753273266451
+status: 3
+tags: []
+user_id: deepak

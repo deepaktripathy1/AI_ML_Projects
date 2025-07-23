@@ -34,16 +34,16 @@ class Evaluator:
         try:
             # Load model
             model_path = os.path.join(
-                self.config.paths.model.save_path, self.config.paths.model.model_name)
+                self.config.model.save_path, self.config.model.model_name)
             self.model = joblib.load(model_path)
 
             # Load test data
-            test_data = pd.read_csv(self.config.paths.data.test_data_path)
+            test_data = pd.read_csv(self.config.data.test_data_path)
 
             # Load feature names
             self.feature_names = load_pickle(
                 os.path.join(
-                    self.config.paths.data.processed_data_path, 'feature_names.pkl')
+                    self.config.data.processed_data_path, 'feature_names.pkl')
             )
 
             target_col = "price_usd"
@@ -136,7 +136,7 @@ class Evaluator:
         os.makedirs(plot_dir, exist_ok=True)
 
         # Set style
-        plt.style.use('seaborn-darkgrid')
+        plt.style.use('seaborn-v0_8-darkgrid')
         sns.set_palette("husl", 8)
 
         # Plot residuals
@@ -259,7 +259,7 @@ class Evaluator:
         {'-' * 20}
         """
         for metric, value in metrics.items():
-            report += f"{metric.replace('-','' '').title()}:{value:.4f}\n"
+            report += f"{metric.replace('-', '' '').title()}:{value:.4f}\n"
 
         if cv_metrics:
             report += f"""
@@ -267,7 +267,7 @@ class Evaluator:
         {'-' * 25}
         """
             for metric, value in cv_metrics.items():
-                report += f"{metric.replace('-','').title()}:{value:.4f}\n"
+                report += f"{metric.replace('-', '').title()}:{value:.4f}\n"
 
             report += f"""
         Model Performance Summary:
@@ -329,7 +329,7 @@ class Evaluator:
         logging.info("Model evaluation completed successfully.")
 
 
-@hydra.main(version_base=None, config_path="./config", config_name="config")
+@hydra.main(version_base=None, config_path="../config", config_name="config")
 def main(cfg: DictConfig) -> None:
     """Main evaluation function."""
 

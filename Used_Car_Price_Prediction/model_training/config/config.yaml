@@ -1,9 +1,10 @@
 defaults:
-  - paths: paths
-  - preprocessing: preprocessing
-  - feature_selection: feature_selection
-  - training: training
-  - evaluation: evaluation
+  - _self_
+  - paths
+  - preprocessing
+  - feature_selection
+  - training
+  - evaluation
   - override hydra/job_logging: disabled
 
 # Project Settings

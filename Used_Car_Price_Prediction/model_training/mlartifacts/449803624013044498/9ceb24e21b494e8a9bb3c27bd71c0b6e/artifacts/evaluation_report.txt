@@ -1,0 +1,25 @@
+
+        MODEL EVALUATION REPORT
+        =======================
+
+        Test Set Metrics:
+        --------------------
+        R2_Score:0.8764
+Mean_Absolute_Error:791.1559
+Mean_Squared_Error:982964.3848
+Root_Mean_Squared_Error:991.4456
+Mean_Absolute_Percentage_Error:0.1409
+
+        Cross-Validation Metrics:
+        -------------------------
+        Mean_Cv_Score:0.8742
+Std_Cv_Score:0.0099
+Min_Cv_Score:0.8580
+Max_Cv_Score:0.8884
+
+        Model Performance Summary:
+        -------------------------
+        - R² Score of 0.8764 indicates the model explains 87.64% of the variance
+        - Average prediction error: 791.16 units
+        - Average percentage error: 0.14%
+        

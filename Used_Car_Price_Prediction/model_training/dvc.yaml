@@ -11,7 +11,7 @@ stages:
       - data/processed/preprocessed_data.csv
       - data/processed/train.csv
       - data/processed/test.csv
-      - data/processed/selected_features.pkl
+      - data/processed/feature_names.pkl
     params:
       - preprocessing
       - current_year
@@ -23,12 +23,11 @@ stages:
     deps:
       - src/training.py
       - data/processed/train.csv
-      - data/processed/selected_features.pkl
+      - data/processed/feature_names.pkl
       - config/config.yaml
       - config/training.yaml
     outs:
-      - models/linear_reg_model.pkl
-      - models/best_params.json
+      - models/lr_model.pkl
     params:
       - training
     metrics:
@@ -40,8 +39,8 @@ stages:
     deps:
       - src/evaluation.py
       - data/processed/test.csv
-      - data/processed/selected_features.pkl
-      - models/linear_reg_model.pkl
+      - data/processed/feature_names.pkl
+      - models/lr_model.pkl
       - config/config.yaml
       - config/evaluation.yaml
     outs:

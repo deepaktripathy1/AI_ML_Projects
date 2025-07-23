@@ -3,11 +3,15 @@
 # ----------------------------------------
 __pycache__/
 *.py[cod]
+*$py.class
 *.so
 *.egg
 *.egg-info/
 dist/
 build/
+
+# C extensions
+*.so
 
 # ----------------------------------------
 # Environment and IDE configs
@@ -20,14 +24,102 @@ venv/
 .idea/
 
 # ----------------------------------------
+# Distribution / packaging
+# ----------------------------------------
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# celery beat schedule file
+celerybeat-schedule
+
+# SageMath parsed files
+*.sage.py
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# ----------------------------------------
 # DVC-related temporary/cache files
 # ----------------------------------------
 .dvc/cache/
 .dvc/tmp/
 .dvc/lock
-used_car_price_prediction/model_training/data/
-!used_car_price_prediction/model_training/data/*.csv
-used_car_price_prediction/model_training/metrics.json
 
 # ----------------------------------------
 # ML model artifacts

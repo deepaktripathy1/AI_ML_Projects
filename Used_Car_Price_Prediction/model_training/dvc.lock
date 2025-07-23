@@ -1,0 +1,136 @@
+schema: '2.0'
+stages:
+  data_preprocessing:
+    cmd: python src/data_preprocessing.py
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: c6fd424a91b14d1f49a8e3dcc9d41eab
+      size: 451
+    - path: config/feature_selection.yaml
+      hash: md5
+      md5: 4f6745f7b5057240f778fe118a595dcb
+      size: 145
+    - path: config/preprocessing.yaml
+      hash: md5
+      md5: f7646407ee29771e4d90707e3e72e754
+      size: 602
+    - path: data/used_car_price_dataset_extended.csv
+      hash: md5
+      md5: b3718c3bc430b16f060d587a5610762e
+      size: 652228
+    - path: src/data_preprocessing.py
+      hash: md5
+      md5: a8a06fc0ddced30bd5316fa92266f6b4
+      size: 9773
+    params:
+      params.yaml:
+        current_year: 2025
+        preprocessing:
+          test_size: 0.2
+          random_state: 42
+          feature_selection:
+            method: rfecv
+            cv_folds: 5
+            scoring: r2
+    outs:
+    - path: data/processed/feature_names.pkl
+      hash: md5
+      md5: 71544179f36e8bef2248f4c131dc014d
+      size: 408
+    - path: data/processed/preprocessed_data.csv
+      hash: md5
+      md5: 56191a20381eb946ac2178ffdbd4e39d
+      size: 1348352
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 6b498a1532666944fa74659d60c8df22
+      size: 270008
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 1cc3809ca652119327ab323fbeeb774f
+      size: 1078697
+    - path: logs/preprocessing_metrics.json
+      hash: md5
+      md5: e09e529c741c10cf727ee4046a429d63
+      size: 243
+  training:
+    cmd: python src/training.py
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: c6fd424a91b14d1f49a8e3dcc9d41eab
+      size: 451
+    - path: config/training.yaml
+      hash: md5
+      md5: cefd4e367d5c53dae06447c3aaf0415a
+      size: 73
+    - path: data/processed/feature_names.pkl
+      hash: md5
+      md5: 71544179f36e8bef2248f4c131dc014d
+      size: 408
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 1cc3809ca652119327ab323fbeeb774f
+      size: 1078697
+    - path: src/training.py
+      hash: md5
+      md5: 38d2444069dce8f410267bcb655fb6ed
+      size: 6530
+    params:
+      params.yaml:
+        training:
+          model_type: Linear_regression
+    outs:
+    - path: logs/training_metrics.json
+      hash: md5
+      md5: 486b1f6206a75aac41407a04132bd1fa
+      size: 236
+    - path: models/lr_model.pkl
+      hash: md5
+      md5: fa49066990935d413dc2f49559423b2a
+      size: 2665
+  evaluation:
+    cmd: python src/evaluation.py
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: c6fd424a91b14d1f49a8e3dcc9d41eab
+      size: 451
+    - path: config/evaluation.yaml
+      hash: md5
+      md5: 63d4ead0c734ad0e56bea8941c488d1f
+      size: 547
+    - path: data/processed/feature_names.pkl
+      hash: md5
+      md5: 71544179f36e8bef2248f4c131dc014d
+      size: 408
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 6b498a1532666944fa74659d60c8df22
+      size: 270008
+    - path: models/lr_model.pkl
+      hash: md5
+      md5: fa49066990935d413dc2f49559423b2a
+      size: 2665
+    - path: src/evaluation.py
+      hash: md5
+      md5: 1fb50071b5d0e8fc1bef2882eb3813ba
+      size: 12365
+    params:
+      params.yaml:
+        evaluation:
+          cross_validation:
+            enabled: true
+            cv_folds: 5
+            scoring: r2
+    outs:
+    - path: logs/evaluation_metrics.json
+      hash: md5
+      md5: 5eca01eda7b9baec3633b697d18ee6c8
+      size: 393
+    - path: plots/
+      hash: md5
+      md5: ddeabfe6433f2bff8b640e55aba87ac2.dir
+      size: 3696371
+      nfiles: 10

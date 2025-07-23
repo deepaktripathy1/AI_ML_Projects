@@ -1,3 +1,4 @@
+import mlflow.sklearn
 import pandas as pd
 import numpy as np
 import logging
@@ -11,6 +12,7 @@ from omegaconf import DictConfig
 import joblib
 import mlflow
 import mlflow.sklearn
+from mlflow.models import infer_signature
 
 from utils import (
     setup_logging, save_pickle, save_json, load_pickle,
@@ -27,12 +29,12 @@ class TrainingPipeline:
         self.feature_names = None
 
     def load_data(
-            self) -> Tuple[pd.DataFrame, pd.Series]:  # type: ignore
+            self) -> Tuple[pd.DataFrame, pd.Series]:
         """Load preprocessed training data."""
         try:
-            train_data = pd.read_csv(self.config.paths.data.train_path)
+            train_data = pd.read_csv(self.config.data.train_data_path)
             self.feature_names = load_pickle(
-                os.path.join(self.config.paths.data.processed_data_path,
+                os.path.join(self.config.data.processed_data_path,
                              'feature_names.pkl'))
             target_col = "price_usd"
 
@@ -65,7 +67,7 @@ class TrainingPipeline:
 
     def train_model(self, X_train: pd.DataFrame, y_train: pd.Series) -> None:
         """Train the regression model."""
-        model_type = self.config.training.model_type
+        model_type = self.config.train.model_type
         logging.info(f"Training {model_type} model...")
         try:
             self.model = self.create_model_pipeline(model_type)
@@ -96,16 +98,29 @@ class TrainingPipeline:
 
     def save_model(self) -> None:
         """Save the trained model."""
-        model_dir = self.config.paths.model.save_path
+        model_dir = self.config.model.save_path
         os.makedirs(model_dir, exist_ok=True)
 
         # Save model
         model_path = os.path.join(
-            model_dir, self.config.paths.model.model_name)
+            model_dir, self.config.model.model_name)
         joblib.dump(self.model, model_path)
 
         # Log model to MLflow
-        mlflow.sklearn.log_model(self.model, "model")  # type: ignore
+        if self.model is not None:
+            signature = infer_signature(
+                self.X_train, self.model.predict(self.X_train))
+            model_info = mlflow.sklearn.log_model(  # type: ignore
+                sk_model=self.model,
+                name="model",
+                signature=signature,
+            )
+            mlflow.set_logged_model_tags(
+                model_info.model_id,
+                tags={"Training Pipeline": "Used Car Price Prediction", }
+            )
+        else:
+            logging.warning("Model is None. Skipping MLflow model logging.")
 
         logging.info(f"Model saved to {model_path}")
 
@@ -137,7 +152,7 @@ class TrainingPipeline:
             raise
 
 
-@hydra.main(version_base=None, config_path="./config", config_name="config")
+@hydra.main(version_base=None, config_path="../config", config_name="config")
 def main(cfg: DictConfig) -> None:
     """Main function to run the training pipeline."""
 

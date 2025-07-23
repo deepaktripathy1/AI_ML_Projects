@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/449803624013044498/9b31248fcc37476b9a72b7049d42a39d/artifacts
+deleted_time: 1753275538911
+end_time: 1753274239048
+entry_point_name: ''
+experiment_id: '449803624013044498'
+lifecycle_stage: deleted
+run_id: 9b31248fcc37476b9a72b7049d42a39d
+run_name: model_training
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1753274238901
+status: 4
+tags: []
+user_id: deepak

@@ -1,0 +1,73 @@
+project_name: used_car_price_prediction
+random_seed: 42
+current_year: 2025
+logging:
+  level: INFO
+  log_dir: logs/
+mlflow:
+  experiment_name: used_car_price_prediction
+  tracking_uri: http://127.0.0.1:5000
+dvc:
+  enable: true
+data:
+  raw_data_path: data/used_car_price_dataset_extended.csv
+  processed_data_path: data/processed
+  train_data_path: data/processed/train.csv
+  test_data_path: data/processed/test.csv
+model:
+  save_path: models/
+  model_name: lr_model.pkl
+preprocessing:
+  test_size: 0.2
+  random_state: 42
+  fillna_column: service_history
+  car_age_column: car_age
+  accident_flag_column: has_accident
+  service_history_mapping:
+    None: 0
+    Partial: 1
+    Full: 2
+  categorical_columns:
+  - fuel_type
+  - brand
+  - transmission
+  - color
+  - insurance_valid
+  drop_columns:
+  - make_year
+  - fuel_type
+  - brand
+  - transmission
+  - color
+  - insurance_valid
+feature_selection:
+  method: rfecv
+  estimator: linear_regression
+  step: 1
+  cv_folds: 5
+  scoring: r2
+  min_features_to_select: 5
+train:
+  model_type: Linear_regression
+  target_column: price_usd
+evaluation:
+  metrics:
+  - r2_score
+  - mean_absolute_error
+  - mean_squared_error
+  - root_mean_squared_error
+  - mean_absolute_percentage_error
+  save_metrics_path: metrics.json
+  plots:
+    save_plots: true
+    plot_dir: plots/
+    plot_formats:
+    - png
+    - pdf
+    residual_plot: true
+    prediction_vs_actual: true
+    qq_plot: true
+  cross_validation:
+    enabled: true
+    cv_folds: 5
+    scoring: r2
