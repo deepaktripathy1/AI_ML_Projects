@@ -2,6 +2,7 @@
 # Python artifacts
 # ----------------------------------------
 __pycache__/
+**/__pycache__/
 *.py[cod]
 *$py.class
 *.so
@@ -124,19 +125,21 @@ dmypy.json
 # ----------------------------------------
 # ML model artifacts
 # ----------------------------------------
-*.pkl
 *.joblib
 *.h5
 *.onnx
 *.pt
 *.model
-models/
 used_car_price_prediction/model_training/models/
 
 # ----------------------------------------
 # Logs and outputs
 # ----------------------------------------
 logs/
+**/logs/
+!logs/drift_reports/
+!logs/monitoring_reports/
+!logs/training_report.json
 *.log
 hydra_output/
 used_car_price_prediction/model_training/logs/
