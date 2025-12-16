@@ -1,0 +1,8 @@
+active = "local"
+
+[profiles.local]
+PREFECT_API_URL = "http://127.0.0.1:4200/api"
+
+[profiles.cloud]
+PREFECT_API_URL = "http://127.0.0.1:4200/api"
+PREFECT_API_KEY = "pnu_NaXHBHv4iy3QB7eQMqjuVWnL7NaxuX2gIUQf"

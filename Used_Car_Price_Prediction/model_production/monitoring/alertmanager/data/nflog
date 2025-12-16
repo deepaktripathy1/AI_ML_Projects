@@ -1,0 +1,25 @@
+™
+ˆ
+T{}/{severity="critical"}:{alertname="ModelPerformanceDegraded", severity="critical"}
+slack-criticalslack*ñØÈ¤°ª¥2	¹í’í‡ˆâŞZñ³İÈ¤°ª¥
+~
+J{}/{severity="critical"}:{alertname="ModelNotLoaded", severity="critical"}
+slack-criticalslack*ÍË×È€»ì:	‹‰ï§ñÏÓ†OÍîÜÈ€»ìŒ
+|
+G{}/{severity="critical"}:{alertname="ServiceDown", severity="critical"}
+slack-criticalslack*ë‹ØÈĞ²è½:
+º‰öêˆêÆ¦ğë®İÈĞ²è½—
+†
+Q{}/{severity="warning"}:{alertname="UnusualPredictionValues", severity="warning"}
+slack-warningsslack*³ö×È„µú°2
+Ã¿ğğ«·‚ ³™İÈ„µú°
+
+K{}/{severity="warning"}:{alertname="DataDriftDetected", severity="warning"}
+slack-warningsslack*ÆØÈĞ§§2
+£Êäû€¯åàÆ±İÈĞ§§
+}
+I{}/{severity="warning"}:{alertname="HighMemoryUsage", severity="warning"}
+slack-warningsslack*ÆØÈ”ˆ«¿2	¦ıíŸ¨òŞ:Æ³İÈ”ˆ«¿–
+…
+Q{}/{severity="warning"}:{alertname="MultipleFeaturesDrifted", severity="warning"}
+slack-warningsslack*ñØÈ”È¯ÿ2	½ÅÉçöó¯»ñ³İÈ”È¯ÿ

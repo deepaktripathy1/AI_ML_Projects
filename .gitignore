@@ -152,3 +152,14 @@ used_car_price_prediction/model_training/hydra_output/
 # ----------------------------------------
 .DS_Store
 Thumbs.db
+
+# -----------------------------------------
+# MLflow
+# -----------------------------------------
+mlartifacts/
+mlruns/
+
+# -----------------------------------------
+# Files
+# -----------------------------------------
+used_car_price_prediction/model_production/monitoring/alertmanager/alertmanager.yml

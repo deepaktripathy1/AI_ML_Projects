@@ -1,0 +1,105 @@
+# Scripts
+scripts/
+
+# Python
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.virtualenv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+*.cover
+.hypothesis/
+
+# Linting & Formatting
+.qodo/
+.ruff_cache/
+.mypy_cache/
+.pylint.d/
+
+# Logs
+logs/
+**/logs/
+!logs/training_report.json
+*.log
+*.log.*
+
+# Data files
+*.csv
+*.xlsx
+*.db
+*.sqlite
+*.sqlite3
+
+# MLflow artifacts
+mlartifacts/
+mlruns/
+mlflow.db
+
+# Monitoring data
+C:/prometheus/
+C:/grafana/
+C:/alertmanager/
+
+# Prefect
+prefect_automation/prefect.db
+
+# Docker
+.dockerignore
+Dockerfile
+docker-compose.yml
+.docker/
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+docs/
+README.md
+
+# Environment files
+.env
+.env.*
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Temporary files
+tmp/
+temp/
+*.tmp

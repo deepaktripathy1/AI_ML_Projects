@@ -1,0 +1,182 @@
+groups:
+  - name: ml_model_alerts
+    rules:
+      # Data Drift Alerts
+      - alert: DataDriftDetected
+        expr: model_data_drift_detected == 1
+        for: 5m
+        labels:
+          severity: warning
+          service: ml-model
+        annotations:
+          summary: "Data drift detected in ML model"
+          description: "Data drift has been detected for the car price prediction model. Current drift score: {{ $value }}"
+
+      # Model Performance Alerts
+      - alert: ModelPerformanceDegraded
+        expr: model_performance_drift_detected == 1
+        for: 10m
+        labels:
+          severity: critical
+          service: ml-model
+        annotations:
+          summary: "Model performance degradation detected"
+          description: "Model performance has degraded significantly. R² score change: {{ $value }}"
+
+      # High Error Rate Alert
+      - alert: HighPredictionErrorRate
+        expr: rate(model_prediction_errors_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          service: ml-model
+        annotations:
+          summary: "High prediction error rate detected"
+          description: "Prediction error rate is {{ $value }} errors per second over the last 5 minutes"
+
+      # Latency Alert
+      - alert: HighPredictionLatency
+        expr: histogram_quantile(0.95, rate(model_prediction_duration_seconds_bucket[5m])) > 1.0
+        for: 5m
+        labels:
+          severity: warning
+          service: ml-model
+        annotations:
+          summary: "High prediction latency detected"
+          description: "95th percentile prediction latency is {{ $value }} seconds"
+
+      # Low Confidence Alert
+      - alert: LowPredictionConfidence
+        expr: histogram_quantile(0.50, rate(model_confidence_score_bucket[10m])) < 0.5
+        for: 15m
+        labels:
+          severity: warning
+          service: ml-model
+        annotations:
+          summary: "Low prediction confidence detected"
+          description: "Median prediction confidence score is {{ $value }}"
+
+      # Data Quality Alert
+      - alert: LowDataQuality
+        expr: model_data_quality_score < 0.8
+        for: 10m
+        labels:
+          severity: warning
+          service: ml-model
+        annotations:
+          summary: "Data quality issues detected"
+          description: "Data quality score is {{ $value }}, below acceptable threshold of 0.8"
+
+      # Missing Values Alert
+      - alert: HighMissingValuesRate
+        expr: model_missing_values_ratio > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          service: ml-model
+        annotations:
+          summary: "High missing values rate detected"
+          description: "Missing values ratio is {{ $value }}, above threshold of 0.1"
+
+      # Model Not Available Alert
+      - alert: ModelNotLoaded
+        expr: up{job="ml-model-metrics"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          service: ml-model
+        annotations:
+          summary: "ML model metrics unavailable"
+          description: "ML model metrics endpoint is down or model is not loaded"
+
+      # Unusual Prediction Values
+      - alert: UnusualPredictionValues
+        expr: model_prediction_mean_dollars > 50000 or model_prediction_mean_dollars < 1000
+        for: 10m
+        labels:
+          severity: warning
+          service: ml-model
+        annotations:
+          summary: "Unusual prediction values detected"
+          description: "Mean prediction value is {{ $value }}, which is outside normal range"
+
+      # Feature Drift Alert
+      - alert: MultipleFeaturesDrifted
+        expr: model_drifted_features_count > 3
+        for: 10m
+        labels:
+          severity: warning
+          service: ml-model
+        annotations:
+          summary: "Multiple features showing drift"
+          description: "{{ $value }} features are showing drift, indicating potential data distribution changes"
+
+  - name: system_alerts
+    rules:
+      # High CPU Usage
+      - alert: HighCPUUsage
+        expr: system_cpu_usage_percent > 80
+        for: 10m
+        labels:
+          severity: warning
+          service: ml-system
+        annotations:
+          summary: "High CPU usage detected"
+          description: "CPU usage is {{ $value }}%, above threshold of 80%"
+
+      # High Memory Usage
+      - alert: HighMemoryUsage
+        expr: system_memory_usage_percent > 85
+        for: 10m
+        labels:
+          severity: warning
+          service: ml-system
+        annotations:
+          summary: "High memory usage detected"
+          description: "Memory usage is {{ $value }}%, above threshold of 85%"
+
+      # Service Down
+      - alert: ServiceDown
+        expr: service_health_status == 0
+        for: 2m
+        labels:
+          severity: critical
+          service: ml-system
+        annotations:
+          summary: "ML service is down"
+          description: "ML service health check is failing"
+
+      # High Disk Usage
+      - alert: HighDiskUsage
+        expr: system_disk_usage_percent > 90
+        for: 5m
+        labels:
+          severity: critical
+          service: ml-system
+        annotations:
+          summary: "High disk usage detected"
+          description: "Disk usage for {{ $labels.mount_point }} is {{ $value }}%"
+
+  - name: api_alerts
+    rules:
+      # High Request Rate
+      - alert: HighRequestRate
+        expr: rate(model_predictions_total[5m]) > 100
+        for: 10m
+        labels:
+          severity: info
+          service: ml-api
+        annotations:
+          summary: "High request rate detected"
+          description: "Request rate is {{ $value }} requests per second"
+
+      # No Recent Predictions
+      - alert: NoPredictionsRecent
+        expr: increase(model_predictions_total[1h]) == 0
+        for: 30m
+        labels:
+          severity: warning
+          service: ml-api
+        annotations:
+          summary: "No predictions in the last hour"
+          description: "No predictions have been made in the last hour, service may be idle or down"

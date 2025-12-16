@@ -1,0 +1,96 @@
+# Python
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+.qodo/
+
+# Logs (will be mounted as volume)
+logs/
+!logs/training_report.json
+**/logs/
+*.log
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+docs/
+README.md
+
+# Environment files
+.env
+.env.*
+
+# Folders NOT needed by Streamlit
+prefect_automation/
+tests/
+deployment/
+scripts/
+data/
+mlartifacts/
+mlruns/
+mlflow.db
+
+# Docker files
+Dockerfile
+docker-compose.yml
+.docker/
+.dockerignore
+
+# Data files
+*.csv
+*.xlsx
+*.db
+*.sqlite
+*.sqlite3
+
+# MLflow
+mlflow.db
+mlartifacts/
+mlruns/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# OS
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Prefect database (not needed for Streamlit)
+prefect_automation/prefect.db

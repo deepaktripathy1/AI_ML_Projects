@@ -1,0 +1,561 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "ML Model Monitoring Dashboard for Used Car Price Prediction with Drift Detection",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "gnetId": null,
+  "graphTooltip": 1,
+  "id": 1,
+  "iteration": 1640995200000,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "type": "text",
+      "title": "",
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "# Used Car Price Model Monitoring Dashboard"
+      },
+      "datasource": "prometheus",
+      "id": 1
+    },
+    {
+      "type": "gauge",
+      "title": "Service Health Status",
+      "id": 2,
+      "datasource": "prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "min": 0,
+          "max": 1,
+          "color": {
+            "mode": "continuous-GrYlRd"
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "service_health_status",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 12,
+        "x": 0,
+        "y": 2
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Service Uptime (seconds)",
+      "id": 3,
+      "datasource": "prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s"
+        }
+      },
+      "targets": [
+        {
+          "expr": "service_uptime_seconds",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 12,
+        "x": 12,
+        "y": 6
+      }
+    },
+    {
+      "type": "text",
+      "title": "",
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 10
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "## Prediction Metrics"
+      },
+      "datasource": "prometheus",
+      "id": 4
+    },
+    {
+      "type": "timeseries",
+      "title": "Total Predictions",
+      "id": 5,
+      "datasource": "prometheus",
+      "targets": [
+        {
+          "expr": "rate(model_predictions_total[5m])",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Prediction Latency (seconds)",
+      "id": 6,
+      "datasource": "prometheus",
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, rate(model_prediction_duration_seconds_bucket[5m]))",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 20
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Prediction Value Statistics",
+      "id": 7,
+      "datasource": "prometheus",
+      "targets": [
+        {
+          "expr": "model_prediction_mean_dollars",
+          "legendFormat": "Mean Value",
+          "refId": "A"
+        },
+        {
+          "expr": "model_prediction_std_dollars",
+          "legendFormat": "Std Dev",
+          "refId": "B"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 28
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Confidence Scores",
+      "id": 8,
+      "datasource": "prometheus",
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, rate(model_confidence_score_bucket[5m]))",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 36
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Batch Prediction Size Distribution",
+      "id": 9,
+      "datasource": "prometheus",
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.50, rate(model_batch_prediction_size_bucket[5m]))",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 44
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Prediction Error Rate",
+      "id": 10,
+      "datasource": "prometheus",
+      "targets": [
+        {
+          "expr": "rate(model_prediction_errors_total[5m])",
+          "legendFormat": "Error Type - {{error_type}}",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 52
+      }
+    },
+    {
+      "type": "text",
+      "title": "",
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 60
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "## Drift Detection Metrics"
+      },
+      "datasource": "prometheus",
+      "id": 11
+    },
+    {
+      "type": "gauge",
+      "title": "Data Drift Detected",
+      "id": 12,
+      "datasource": "prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "targets": [
+        {
+          "expr": "model_data_drift_detected",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 0,
+        "y": 62
+      }
+    },
+    {
+      "type": "gauge",
+      "title": "Model Performance Drift Detected",
+      "id": 13,
+      "datasource": "prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "targets": [
+        {
+          "expr": "model_performance_drift_detected",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 8,
+        "y": 66
+      }
+    },
+    {
+      "type": "gauge",
+      "title": "Prediction Drift Detected",
+      "id": 14,
+      "datasource": "prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "targets": [
+        {
+          "expr": "model_prediction_drift_detected",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 16,
+        "y": 70
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Drift Checks Over Time",
+      "id": 15,
+      "datasource": "prometheus",
+      "targets": [
+        {
+          "expr": "rate(model_drift_checks_total[5m])",
+          "legendFormat": "{{drift_type}}",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 74
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Feature Drift Count",
+      "id": 16,
+      "datasource": "prometheus",
+      "targets": [
+        {
+          "expr": "model_drifted_features_count",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 82
+      }
+    },
+    {
+      "type": "gauge",
+      "title": "Data Drift Score",
+      "id": 17,
+      "datasource": "prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1
+        }
+      },
+      "targets": [
+        {
+          "expr": "model_data_drift_score",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 12,
+        "x": 0,
+        "y": 90
+      }
+    },
+    {
+      "type": "gauge",
+      "title": "Model Performance Change (R\u00b2)",
+      "id": 18,
+      "datasource": "prometheus",
+      "targets": [
+        {
+          "expr": "model_performance_r2_change",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 94
+      }
+    },
+    {
+      "type": "gauge",
+      "title": "Model Performance Change (MAE)",
+      "id": 19,
+      "datasource": "prometheus",
+      "targets": [
+        {
+          "expr": "model_performance_mae_change",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 98
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Failed Model Tests",
+      "id": 20,
+      "datasource": "prometheus",
+      "targets": [
+        {
+          "expr": "model_test_failures_count",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 102
+      }
+    },
+    {
+      "type": "table",
+      "title": "Top 5 Drifted Features",
+      "id": 21,
+      "datasource": "prometheus",
+      "targets": [
+        {
+          "expr": "topk(5, model_feature_drift_score)",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 106
+      }
+    },
+    {
+      "type": "text",
+      "title": "",
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 114
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "## System Health"
+      },
+      "datasource": "prometheus",
+      "id": 22
+    },
+    {
+      "type": "timeseries",
+      "title": "CPU and Memory Usage",
+      "id": 23,
+      "datasource": "prometheus",
+      "targets": [
+        {
+          "expr": "system_cpu_usage_percent",
+          "legendFormat": "CPU",
+          "refId": "A"
+        },
+        {
+          "expr": "system_memory_usage_percent",
+          "legendFormat": "Memory",
+          "refId": "B"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 116
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Disk Usage (%)",
+      "id": 24,
+      "datasource": "prometheus",
+      "targets": [
+        {
+          "expr": "system_disk_usage_percent",
+          "legendFormat": "{{mount_point}}",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 124
+      }
+    },
+    {
+      "type": "text",
+      "title": "",
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 132
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "## Model Info"
+      },
+      "datasource": "prometheus",
+      "id": 25
+    },
+    {
+      "type": "table",
+      "title": "Model Metadata",
+      "id": 26,
+      "datasource": "prometheus",
+      "targets": [
+        {
+          "expr": "model_info",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 134
+      }
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 34,
+  "style": "dark",
+  "tags": [
+    "ml",
+    "monitoring",
+    "car-price-prediction"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "ML Model Monitoring - Used Car Price Prediction (Complete)",
+  "uid": "ml-model-monitoring",
+  "version": 2,
+  "weekStart": ""
+}

@@ -1,0 +1,333 @@
+service: service:svc
+name: used_car_price_prediction_service
+version: v20251027_193340
+bentoml_version: 1.4.18
+creation_time: '2025-10-27T14:04:04.325940+00:00'
+labels:
+  owner: ml-team
+  stage: production
+  version: 1.0.0
+  project: used-car-price-prediction
+models:
+- tag: used_car_price_model:xmtgl7vthwvlryeu
+  module: bentoml.sklearn
+  creation_time: '2025-10-27T14:03:36.271820+00:00'
+entry_service: used_car_price_prediction_service
+services:
+- name: used_car_price_prediction_service
+  service: ''
+  models: []
+  dependencies: []
+  config: {}
+envs: []
+schema:
+  name: used_car_price_prediction_service
+  type: service
+  routes:
+  - name: health
+    route: /health
+    batchable: false
+    input:
+      properties: {}
+      title: Input
+      type: object
+    output:
+      type: object
+    is_task: false
+  - name: model_info
+    route: /model_info
+    batchable: false
+    input:
+      properties: {}
+      title: Input
+      type: object
+    output:
+      type: object
+    is_task: false
+  - name: predict_batch
+    route: /predict_batch
+    batchable: false
+    input:
+      properties:
+        input_data:
+          description: Input schema for batch predictions.
+          properties:
+            cars:
+              description: Car data for price prediction
+              items:
+                description: Input schema for raw data.
+                properties:
+                  make_year:
+                    description: Year the car was manufactured
+                    maximum: 2024
+                    minimum: 1900
+                    title: Make Year
+                    type: integer
+                  accidents_reported:
+                    description: Number of accidents reported
+                    maximum: 10
+                    minimum: 0
+                    title: Accidents Reported
+                    type: integer
+                  fuel_type:
+                    description: 'Type of fuel: Diesel, Electric, Petrol'
+                    title: Fuel Type
+                    type: string
+                  brand:
+                    description: 'Car brand: Honda, Toyota, Ford, Chevrolet,BMW, Volkswagen,
+                      Tesla, Hyundai, Kia, Nissan'
+                    title: Brand
+                    type: string
+                  transmission:
+                    description: 'Transmission type: Automatic, Manual'
+                    title: Transmission
+                    type: string
+                  color:
+                    description: 'Car color: Black, Blue, Gray, Red, Silver, White'
+                    title: Color
+                    type: string
+                  insurance_valid:
+                    description: 'Insurance validity: Yes, No'
+                    title: Insurance Valid
+                    type: string
+                  service_history:
+                    default: None
+                    description: 'Service history: Full Service History, Partial Service
+                      History, None'
+                    title: Service History
+                    type: string
+                  mileage_kmpl:
+                    description: Mileage in kilometers per liter
+                    title: Mileage Kmpl
+                    maximum: 100000.0
+                    minimum: 0.0
+                    type: number
+                  engine_cc:
+                    description: Engine capacity in cc
+                    maximum: 100000
+                    minimum: 0
+                    title: Engine Cc
+                    type: integer
+                  owner_count:
+                    description: Number of owners
+                    maximum: 100
+                    minimum: 0
+                    title: Owner Count
+                    type: integer
+                required:
+                - make_year
+                - accidents_reported
+                - fuel_type
+                - brand
+                - transmission
+                - color
+                - insurance_valid
+                - mileage_kmpl
+                - engine_cc
+                - owner_count
+                title: RawCarData
+                type: object
+              maxItems: 1000
+              minItems: 1
+              title: Cars
+              type: array
+          required:
+          - cars
+          title: BatchPredictionInput
+          type: object
+      required:
+      - input_data
+      title: Input
+      type: object
+    output:
+      properties:
+        predictions:
+          description: List of prediction results
+          items:
+            description: Output schema for used car price prediction.
+            properties:
+              predicted_price:
+                description: Predicted car price
+                title: Predicted Price
+                type: number
+              confidence_score:
+                description: 95% confidence interval
+                title: Confidence Score
+                type: number
+              input_validation:
+                description: Input validation results
+                title: Input Validation
+                type: object
+              preprocessing_info:
+                description: Preprocessing steps applied
+                title: Preprocessing Info
+                type: object
+              prediction_metadata:
+                description: Prediction metadata
+                title: Prediction Metadata
+                type: object
+            required:
+            - predicted_price
+            - confidence_score
+            - input_validation
+            - preprocessing_info
+            - prediction_metadata
+            title: PredictionOutput
+            type: object
+          title: Predictions
+          type: array
+        batch_metadata:
+          description: Batch processing metadata
+          title: Batch Metadata
+          type: object
+      required:
+      - predictions
+      - batch_metadata
+      title: BatchPredictionOutputIODescriptor
+      type: object
+    is_task: false
+  - name: predict_single
+    route: /predict_single
+    batchable: false
+    input:
+      properties:
+        input_data:
+          description: Input schema for raw data.
+          properties:
+            make_year:
+              description: Year the car was manufactured
+              maximum: 2024
+              minimum: 1900
+              title: Make Year
+              type: integer
+            accidents_reported:
+              description: Number of accidents reported
+              maximum: 10
+              minimum: 0
+              title: Accidents Reported
+              type: integer
+            fuel_type:
+              description: 'Type of fuel: Diesel, Electric, Petrol'
+              title: Fuel Type
+              type: string
+            brand:
+              description: 'Car brand: Honda, Toyota, Ford, Chevrolet,BMW, Volkswagen,
+                Tesla, Hyundai, Kia, Nissan'
+              title: Brand
+              type: string
+            transmission:
+              description: 'Transmission type: Automatic, Manual'
+              title: Transmission
+              type: string
+            color:
+              description: 'Car color: Black, Blue, Gray, Red, Silver, White'
+              title: Color
+              type: string
+            insurance_valid:
+              description: 'Insurance validity: Yes, No'
+              title: Insurance Valid
+              type: string
+            service_history:
+              default: None
+              description: 'Service history: Full Service History, Partial Service
+                History, None'
+              title: Service History
+              type: string
+            mileage_kmpl:
+              description: Mileage in kilometers per liter
+              title: Mileage Kmpl
+              maximum: 100000.0
+              minimum: 0.0
+              type: number
+            engine_cc:
+              description: Engine capacity in cc
+              maximum: 100000
+              minimum: 0
+              title: Engine Cc
+              type: integer
+            owner_count:
+              description: Number of owners
+              maximum: 100
+              minimum: 0
+              title: Owner Count
+              type: integer
+          required:
+          - make_year
+          - accidents_reported
+          - fuel_type
+          - brand
+          - transmission
+          - color
+          - insurance_valid
+          - mileage_kmpl
+          - engine_cc
+          - owner_count
+          title: RawCarData
+          type: object
+      required:
+      - input_data
+      title: Input
+      type: object
+    output:
+      properties:
+        predicted_price:
+          description: Predicted car price
+          title: Predicted Price
+          type: number
+        confidence_score:
+          description: 95% confidence interval
+          title: Confidence Score
+          type: number
+        input_validation:
+          description: Input validation results
+          title: Input Validation
+          type: object
+        preprocessing_info:
+          description: Preprocessing steps applied
+          title: Preprocessing Info
+          type: object
+        prediction_metadata:
+          description: Prediction metadata
+          title: Prediction Metadata
+          type: object
+      required:
+      - predicted_price
+      - confidence_score
+      - input_validation
+      - preprocessing_info
+      - prediction_metadata
+      title: PredictionOutputIODescriptor
+      type: object
+    is_task: false
+  description: Class-based BentoML service for car price prediction.
+  paths:
+    /health:
+      mounted: false
+    /model_info:
+      mounted: false
+    /predict_batch:
+      mounted: false
+    /predict_single:
+      mounted: false
+args: {}
+spec: 2
+image:
+  base_image: python:3.12-slim
+  python_version: '3.12'
+  commands:
+  - apt-get update && apt-get install -q -y --no-install-recommends --allow-remove-essential
+    ca-certificates gnupg2 bash build-essential git
+  python_requirements: 'bentoml>=1.0.0
+
+    scikit-learn>=1.3.0
+
+    pandas>=2.0.0
+
+    numpy>=1.24.0
+
+    pydantic>=2.0.0
+
+    bentoml==1.4.18
+
+    '
+  post_commands: []

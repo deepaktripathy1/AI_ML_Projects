@@ -1,0 +1,75 @@
+# Prometheus Configuration for ML Model Monitoring
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  scrape_timeout: 10s
+  external_labels:
+    monitor: "ml-model-monitor"
+    environment: "production"
+
+# Rule files for alerting
+rule_files:
+  - "rules/*.yml"
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ["localhost:9093"]
+      api_version: v2
+      timeout: 10s
+
+# Scrape configurations
+scrape_configs:
+  # Prometheus self-monitoring
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+    scrape_interval: 30s
+    scrape_timeout: 10s
+
+  # ML Model Metrics via FastAPI
+  - job_name: "ml-model-metrics"
+    static_configs:
+      - targets: ["localhost:8001"]
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    metrics_path: "/metrics"
+    
+  # FastAPI service
+  - job_name: "fastapi"
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    static_configs:
+      - targets: ["localhost:8000"]
+    metrics_path: "/metrics"
+
+  # BentoML service
+  - job_name: "bentoml"
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    static_configs:
+      - targets: ["localhost:3001"]
+    metrics_path: "/metrics"
+
+  # System metrics from Node Exporter
+  - job_name: "node"
+    static_configs:
+      - targets: ["localhost:9100"]
+    scrape_interval: 30s
+    scrape_timeout: 10s
+
+  # Container metrics
+  - job_name: "cadvisor"
+    static_configs:
+      - targets: ["localhost:8080"]
+    scrape_interval: 30s
+    scrape_timeout: 10s
+
+  # AlertManager
+  - job_name: "alertmanager"
+    static_configs:
+      - targets: ["localhost:9093"]
+    scrape_interval: 30s
+    scrape_timeout: 10s
+

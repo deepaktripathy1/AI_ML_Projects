@@ -1,0 +1,241 @@
+services:
+  # ===== MLflow Tracking Server =====
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    container_name: used-car-mlflow
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./mlflow.db:/mlflow/mlflow.db
+      - ./mlartifacts:/mlflow/artifacts
+    environment:
+      - MLFLOW_BACKEND_STORE_URI=sqlite:///mlflow/mlflow.db
+      - MLFLOW_DEFAULT_ARTIFACT_ROOT=/mlflow/artifacts
+    command: >
+      mlflow server  --backend-store-uri sqlite:///mlflow/mlflow.db  --default-artifact-root /mlflow/artifacts  --host 0.0.0.0  --port 8080
+    networks:
+      - ml-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+
+  # ===== Prometheus =====
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: used-car-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - C:/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - C:/prometheus/rules/ml_model_alerts.yml:/etc/prometheus/alert_rules.yml
+      - C:/prometheus/data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    networks:
+      - ml-network
+    restart: unless-stopped
+
+  # ===== Grafana =====
+  grafana:
+    image: grafana/grafana:latest
+    container_name: used-car-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - C:/grafana/data:/var/lib/grafana
+      - C:/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - C:/grafana/provisioning:/etc/grafana/provisioning/datasources
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    networks:
+      - ml-network
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  # ===== Alertmanager =====
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: used-car-alertmanager
+    ports:
+      - "9093:9093"
+    volumes:
+      - C:/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - C:/alertmanager/data:/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+    networks:
+      - ml-network
+    restart: unless-stopped
+
+  # ===== FastAPI Service =====
+  fastapi:
+    build:
+      context: .
+      dockerfile: ./docker/fastapi/Dockerfile
+    image: used-car-price-prediction-fastapi:dev
+    container_name: used-car-fastapi
+    ports:
+      - "8000:8000"
+    environment:
+      # Application Settings
+      - ENVIRONMENT=production
+      - HOST=0.0.0.0
+      - PORT=8000
+      - WORKERS=4
+      - LOG_LEVEL=info
+      - BENTOML_HOME=/bento_store
+      # Model Configuration
+      - MODEL_NAME=linear_regression_model
+      - MODEL_STAGE=Production
+      # Monitoring
+      - ENABLE_MONITORING=true
+    volumes:
+      - C:/Users/deepak/bentoml:/bento_store:ro
+    networks:
+      - ml-network
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ===== BentoML Service =====
+  bentoml:
+    build:
+      context: .
+      target: bentoml
+    image: used-car-price-prediction/bentoml:latest
+    container_name: used-car-bentoml
+    ports:
+      - "3001:3001"
+    volumes:
+      - .:/app
+      - ./logs
+      - bentoml-data:/root/bentoml
+    environment:
+      - MONGODB_URI=${MONGODB_URL}
+      - MLFLOW_TRACKING_URI=http://mlflow:8080
+      - MODEL_NAME=linear_regression_model
+    networks:
+      - ml-network
+    depends_on:
+      - mlflow
+    restart: unless-stopped
+
+  # ===== Streamlit App =====
+  streamlit:
+    build:
+      context: .
+      dockerfile: docker/streamlit/Dockerfile
+    image: used-car-price-prediction-streamlit:dev
+    container_name: used-car-streamlit
+    ports:
+      - "8501:8501"
+    environment:
+      - ENVIRONMENT=production
+      - HOST=0.0.0.0
+      - PORT=8501
+      - USE_LOCAL_MODEL=false
+      - API_HOST=fastapi
+      - API_PORT=8000
+      - MAX_WAIT_SECONDS=220
+    volumes:
+      - ./logs/training_report.json:/app/logs/training_report.json
+    networks:
+      - ml-network
+    depends_on:
+      - fastapi
+    restart: unless-stopped
+
+  # ===== Metrics Server for Prometheus =====
+  metrics-server:
+    build:
+      context: .
+      target: metrics
+    image: used-car-price-prediction/metrics-server:latest
+    container_name: metrics-server
+    ports:
+      - "8001:8001"
+    volumes:
+      - .:/app
+      - ./logs:/app/logs
+    environment:
+      - MONGODB_URI=${MONGODB_URL}
+      - MLFLOW_TRACKING_URI=http://mlflow:8080
+    networks:
+      - ml-network
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  # ===== Prefect Server =====
+  prefect-server:
+    image: prefecthq/prefect:2-latest
+    container_name: used-car-prefect-server
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./prefect_automation/prefect.db:/root/.prefect/prefect.db
+    environment:
+      - PREFECT_SERVER_API_HOST=0.0.0.0
+      - PREFECT_SERVER_API_PORT=4200
+      - PREFECT_API_DATABASE_CONNECTION_URL=sqlite+aiosqlite:////root/.prefect/prefect.db
+      - PREFECT_API_URL=http://127.0.0.1:4200/api
+    command: prefect server start --host 0.0.0.0
+    networks:
+      - ml-network
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:4200/api/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ===== Prefect Worker =====
+  prefect-worker:
+    build:
+      context: .
+      target: prefect-worker
+    image: used-car-price-prediction/prefect-worker:latest
+    container_name: used-car-prefect-worker
+    volumes:
+      - .:/app
+      - ./logs:/app/logs
+    environment:
+      - PREFECT_API_URL=http://prefect-server:4200/api
+      - MONGODB_URI=${MONGODB_URL}
+      - HOPSWORKS_API_KEY=${HOPSWORKS_API_KEY}
+      - HOPSWORKS_PROJECT=${HOPSWORKS_PROJECT}
+      - MLFLOW_TRACKING_URI=http://mlflow:8080
+    networks:
+      - ml-network
+    depends_on:
+      - prefect-server
+      - mlflow
+    restart: unless-stopped
+
+# ===== Networks =====
+networks:
+  ml-network:
+    driver: bridge
+
+# ===== Volumes =====
+volumes:
+  bentoml-data:
+    driver: local

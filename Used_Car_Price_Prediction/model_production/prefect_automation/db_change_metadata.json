@@ -1,0 +1,26 @@
+{
+  "document_count": 10000,
+  "content_hash": "d4e784c56e48870d948ba56a2686260b",
+  "stats_hash": "028a40e5f0b1a0981ffb0d59e11cf17c",
+  "last_check_time": "2025-10-04T22:08:52.544548",
+  "collection_stats": {
+    "document_count": 10000,
+    "collection": "raw_csv",
+    "database_name": "used_car_raw_data",
+    "fields": [
+      "make_year",
+      "mileage_kmpl",
+      "engine_cc",
+      "fuel_type",
+      "owner_count",
+      "price_usd",
+      "brand",
+      "transmission",
+      "color",
+      "service_history",
+      "accidents_reported",
+      "insurance_valid"
+    ],
+    "field_count": 12
+  }
+}

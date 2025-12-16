@@ -1,0 +1,540 @@
+components:
+  schemas:
+    BatchPredictionInput:
+      description: Input schema for batch predictions.
+      properties:
+        cars:
+          description: Car data for price prediction
+          items:
+            $ref: '#/components/schemas/RawCarData'
+          maxItems: 1000
+          minItems: 1
+          title: Cars
+          type: array
+      required:
+      - cars
+      title: BatchPredictionInput
+      type: object
+    BatchPredictionOutputIODescriptor:
+      properties:
+        batch_metadata:
+          description: Batch processing metadata
+          title: Batch Metadata
+          type: object
+        predictions:
+          description: List of prediction results
+          items:
+            $ref: '#/components/schemas/PredictionOutput'
+          title: Predictions
+          type: array
+      required:
+      - predictions
+      - batch_metadata
+      title: BatchPredictionOutputIODescriptor
+      type: object
+    InternalServerError:
+      description: Internal Server Error
+      properties:
+        detail:
+          title: Error Detail
+          type: string
+        error:
+          title: Message
+          type: string
+      required:
+      - error
+      title: InternalServerError
+      type: object
+    InvalidArgument:
+      description: Bad Request
+      properties:
+        detail:
+          title: Error Detail
+          type: string
+        error:
+          title: Message
+          type: string
+      required:
+      - error
+      title: InvalidArgument
+      type: object
+    NotFound:
+      description: Not Found
+      properties:
+        detail:
+          title: Error Detail
+          type: string
+        error:
+          title: Message
+          type: string
+      required:
+      - error
+      title: NotFound
+      type: object
+    PredictionOutput:
+      description: Output schema for used car price prediction.
+      properties:
+        confidence_score:
+          description: 95% confidence interval
+          title: Confidence Score
+          type: number
+        input_validation:
+          description: Input validation results
+          title: Input Validation
+          type: object
+        predicted_price:
+          description: Predicted car price
+          title: Predicted Price
+          type: number
+        prediction_metadata:
+          description: Prediction metadata
+          title: Prediction Metadata
+          type: object
+        preprocessing_info:
+          description: Preprocessing steps applied
+          title: Preprocessing Info
+          type: object
+      required:
+      - predicted_price
+      - confidence_score
+      - input_validation
+      - preprocessing_info
+      - prediction_metadata
+      title: PredictionOutput
+      type: object
+    PredictionOutputIODescriptor:
+      properties:
+        confidence_score:
+          description: 95% confidence interval
+          title: Confidence Score
+          type: number
+        input_validation:
+          description: Input validation results
+          title: Input Validation
+          type: object
+        predicted_price:
+          description: Predicted car price
+          title: Predicted Price
+          type: number
+        prediction_metadata:
+          description: Prediction metadata
+          title: Prediction Metadata
+          type: object
+        preprocessing_info:
+          description: Preprocessing steps applied
+          title: Preprocessing Info
+          type: object
+      required:
+      - predicted_price
+      - confidence_score
+      - input_validation
+      - preprocessing_info
+      - prediction_metadata
+      title: PredictionOutputIODescriptor
+      type: object
+    RawCarData:
+      description: Input schema for raw data.
+      properties:
+        accidents_reported:
+          description: Number of accidents reported
+          maximum: 10
+          minimum: 0
+          title: Accidents Reported
+          type: integer
+        brand:
+          description: 'Car brand: Honda, Toyota, Ford, Chevrolet,BMW, Volkswagen,
+            Tesla, Hyundai, Kia, Nissan'
+          title: Brand
+          type: string
+        color:
+          description: 'Car color: Black, Blue, Gray, Red, Silver, White'
+          title: Color
+          type: string
+        engine_cc:
+          description: Engine capacity in cc
+          maximum: 100000
+          minimum: 0
+          title: Engine Cc
+          type: integer
+        fuel_type:
+          description: 'Type of fuel: Diesel, Electric, Petrol'
+          title: Fuel Type
+          type: string
+        insurance_valid:
+          description: 'Insurance validity: Yes, No'
+          title: Insurance Valid
+          type: string
+        make_year:
+          description: Year the car was manufactured
+          maximum: 2024
+          minimum: 1900
+          title: Make Year
+          type: integer
+        mileage_kmpl:
+          anyOf:
+          - maximum: 100000.0
+            minimum: 0.0
+            type: number
+          - type: 'null'
+          description: Mileage in kilometers per liter
+          title: Mileage Kmpl
+        owner_count:
+          description: Number of owners
+          maximum: 100
+          minimum: 0
+          title: Owner Count
+          type: integer
+        service_history:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: None
+          description: 'Service history: Full Service History, Partial Service History,
+            None'
+          title: Service History
+        transmission:
+          description: 'Transmission type: Automatic, Manual'
+          title: Transmission
+          type: string
+      required:
+      - make_year
+      - accidents_reported
+      - fuel_type
+      - brand
+      - transmission
+      - color
+      - insurance_valid
+      - mileage_kmpl
+      - engine_cc
+      - owner_count
+      title: RawCarData
+      type: object
+    TaskStatusResponse:
+      properties:
+        created_at:
+          title: Created At
+          type: string
+        executed_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Executed At
+        status:
+          enum:
+          - in_progress
+          - success
+          - failure
+          - cancelled
+          title: Status
+          type: string
+        task_id:
+          title: Task Id
+          type: string
+      required:
+      - task_id
+      - status
+      - created_at
+      - executed_at
+      title: TaskStatusResponse
+      type: object
+    health__Input:
+      properties: {}
+      title: health__Input
+      type: object
+    model_info__Input:
+      properties: {}
+      title: model_info__Input
+      type: object
+    predict_batch__Input:
+      properties:
+        input_data:
+          $ref: '#/components/schemas/BatchPredictionInput'
+      required:
+      - input_data
+      title: predict_batch__Input
+      type: object
+    predict_single__Input:
+      properties:
+        input_data:
+          $ref: '#/components/schemas/RawCarData'
+      required:
+      - input_data
+      title: predict_single__Input
+      type: object
+info:
+  contact:
+    email: contact@bentoml.com
+    name: BentoML Team
+  description: "# used_car_price_prediction_service:dev\n\n[![pypi_status](https://img.shields.io/badge/BentoML-1.4.18-informational)](https://pypi.org/project/BentoML)\n\
+    [![documentation_status](https://readthedocs.org/projects/bentoml/badge/?version=latest)](https://docs.bentoml.com/)\n\
+    [![join_slack](https://badgen.net/badge/Join/BentoML%20Slack/cyan?icon=slack)](https://l.bentoml.com/join-slack-swagger)\n\
+    [![BentoML GitHub Repo](https://img.shields.io/github/stars/bentoml/bentoml?style=social)](https://github.com/bentoml/BentoML)\n\
+    [![Twitter Follow](https://img.shields.io/twitter/follow/bentomlai?label=Follow%20BentoML&style=social)](https://twitter.com/bentomlai)\n\
+    \nThis is a Machine Learning Service created with BentoML.\n\n## Help\n\n* [\U0001F4D6\
+    \ Documentation](https://docs.bentoml.com/en/latest/): Learn how to use BentoML.\n\
+    * [\U0001F4AC Community](https://l.bentoml.com/join-slack-swagger): Join the BentoML\
+    \ Slack community.\n* [\U0001F41B GitHub Issues](https://github.com/bentoml/BentoML/issues):\
+    \ Report bugs and feature requests.\n* Tip: you can also [customize this README](https://docs.bentoml.com/en/latest/reference/bentoml/bento-build-options.html#description).\n"
+  title: used_car_price_prediction_service
+  version: None
+openapi: 3.0.2
+paths:
+  /health:
+    post:
+      description: Health check endpoint.
+      operationId: used_car_price_prediction_service__health
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties: {}
+              title: Input
+              type: object
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Successful Response
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidArgument'
+          description: Bad Request
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+          description: Not Found
+        500:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+      tags:
+      - Service APIs
+      x-bentoml-name: health
+  /healthz:
+    get:
+      description: Health check endpoint. Expecting an empty response with status
+        code <code>200</code> when the service is in health state. The <code>/healthz</code>
+        endpoint is <b>deprecated</b>. (since Kubernetes v1.16)
+      responses:
+        '200':
+          description: Successful Response
+      tags:
+      - Infrastructure
+  /livez:
+    get:
+      description: Health check endpoint for Kubernetes. Healthy endpoint responses
+        with a <code>200</code> OK status.
+      responses:
+        '200':
+          description: Successful Response
+      tags:
+      - Infrastructure
+  /metrics:
+    get:
+      description: Prometheus metrics endpoint. The <code>/metrics</code> responses
+        with a <code>200</code>. The output can then be used by a Prometheus sidecar
+        to scrape the metrics of the service.
+      responses:
+        '200':
+          description: Successful Response
+      tags:
+      - Infrastructure
+  /model_info:
+    post:
+      description: Get model information and feature details.
+      operationId: used_car_price_prediction_service__model_info
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties: {}
+              title: Input
+              type: object
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Successful Response
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidArgument'
+          description: Bad Request
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+          description: Not Found
+        500:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+      tags:
+      - Service APIs
+      x-bentoml-name: model_info
+  /predict_batch:
+    post:
+      description: "Predict car prices for multiple cars with complete processing\
+        \ pipeline.\n\n        Args:\n            input_data: Batch of raw car data\n\
+        \n        Returns:\n            BatchPredictionOutput: Batch predictions with\
+        \ metadata\n        "
+      operationId: used_car_price_prediction_service__predict_batch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                input_data:
+                  $ref: '#/components/schemas/BatchPredictionInput'
+              required:
+              - input_data
+              title: Input
+              type: object
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                properties:
+                  batch_metadata:
+                    description: Batch processing metadata
+                    title: Batch Metadata
+                    type: object
+                  predictions:
+                    description: List of prediction results
+                    items:
+                      $ref: '#/components/schemas/PredictionOutput'
+                    title: Predictions
+                    type: array
+                required:
+                - predictions
+                - batch_metadata
+                title: BatchPredictionOutputIODescriptor
+                type: object
+          description: Successful Response
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidArgument'
+          description: Bad Request
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+          description: Not Found
+        500:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+      tags:
+      - Service APIs
+      x-bentoml-name: predict_batch
+  /predict_single:
+    post:
+      description: "Predict car price for a single car.\n\n        Args:\n       \
+        \     input_data: Raw car data\n\n        Returns:\n            PredictionOutput:\
+        \ Prediction with metadata\n        "
+      operationId: used_car_price_prediction_service__predict_single
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                input_data:
+                  $ref: '#/components/schemas/RawCarData'
+              required:
+              - input_data
+              title: Input
+              type: object
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                properties:
+                  confidence_score:
+                    description: 95% confidence interval
+                    title: Confidence Score
+                    type: number
+                  input_validation:
+                    description: Input validation results
+                    title: Input Validation
+                    type: object
+                  predicted_price:
+                    description: Predicted car price
+                    title: Predicted Price
+                    type: number
+                  prediction_metadata:
+                    description: Prediction metadata
+                    title: Prediction Metadata
+                    type: object
+                  preprocessing_info:
+                    description: Preprocessing steps applied
+                    title: Preprocessing Info
+                    type: object
+                required:
+                - predicted_price
+                - confidence_score
+                - input_validation
+                - preprocessing_info
+                - prediction_metadata
+                title: PredictionOutputIODescriptor
+                type: object
+          description: Successful Response
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidArgument'
+          description: Bad Request
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+          description: Not Found
+        500:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
+      tags:
+      - Service APIs
+      x-bentoml-name: predict_single
+  /readyz:
+    get:
+      description: A <code>200</code> OK status from <code>/readyz</code> endpoint
+        indicated the service is ready to accept traffic. From that point and onward,
+        Kubernetes will use <code>/livez</code> endpoint to perform periodic health
+        checks.
+      responses:
+        '200':
+          description: Successful Response
+      tags:
+      - Infrastructure
+servers:
+- url: .
+tags:
+- description: BentoML Service API endpoints for inference.
+  name: Service APIs
+- description: Common infrastructure endpoints for observability.
+  name: Infrastructure

@@ -1,0 +1,48 @@
+args: {}
+conda:
+  channels: null
+  dependencies: null
+  environment_yml: null
+  pip: null
+description: null
+docker:
+  base_image: null
+  cuda_version: null
+  distro: debian
+  dockerfile_template: null
+  env: null
+  python_version: '3.12'
+  setup_script: null
+  system_packages: null
+envs: []
+exclude: []
+include:
+- service.py
+labels:
+  owner: ml-team
+  project: used-car-price-prediction
+  stage: production
+  version: 1.0.0
+models:
+- alias: null
+  filter: null
+  tag: used_car_price_model:latest
+name: null
+python:
+  extra_index_url: null
+  find_links: null
+  index_url: null
+  lock_packages: false
+  no_index: null
+  pack_git_packages: true
+  packages:
+  - bentoml>=1.0.0
+  - scikit-learn>=1.3.0
+  - pandas>=2.0.0
+  - numpy>=1.24.0
+  - pydantic>=2.0.0
+  pip_args: null
+  requirements_txt: null
+  trusted_host: null
+  wheels: null
+service: service:svc

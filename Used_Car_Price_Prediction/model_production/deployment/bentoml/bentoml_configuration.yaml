@@ -1,0 +1,177 @@
+api_server:
+  port: 3000
+  host: "0.0.0.0"
+  backlog: 2048
+  max_request_size: 52428800  # 50MB
+  workers: 2
+  timeout: 600
+  keep_alive_timeout: 5
+  ssl:
+    enabled: false
+    # cert_file: "/path/to/cert.pem"
+    # key_file: "/path/to/key.pem"
+
+cors:
+  enabled: true
+  access_control_allow_origins:
+    - "*"
+  access_control_allow_methods:
+    - "GET"
+    - "POST"
+    - "HEAD"
+    - "OPTIONS"
+  access_control_allow_headers:
+    - "*"
+    - "Content-Type"
+    - "Authorization"
+    - "X-Requested-With"
+  access_control_allow_credentials: false
+  access_control_max_age: 3600  
+
+logging:
+  level: "INFO"
+  format: "TEXT"  # or "JSON"
+  access:
+    enabled: true
+    request_content_length: true
+    request_content_type: true
+    response_content_length: true
+    response_content_type: true
+    skip_paths:
+      - "/health"
+      - "/metrics"
+      - "/docs"
+      - "/openapi.json"
+
+metrics:
+  enabled: true
+  namespace: "used_car_price_prediction"
+  duration:
+    enabled: true
+    buckets:
+      - 0.005
+      - 0.01
+      - 0.025
+      - 0.05
+      - 0.075
+      - 0.1
+      - 0.25
+      - 0.5
+      - 0.75
+      - 1.0
+      - 2.5
+      - 5.0
+      - 7.5
+      - 10.0
+      - 30.0
+      - 60.0
+
+tracing:
+  enabled: false
+  type: "zipkin"
+  sample_rate: 0.1
+  # endpoint: "http://localhost:9411/api/v2/spans"
+
+runner:
+  batching:
+    enabled: true
+    max_batch_size: 100
+    max_latency_ms: 1000
+
+monitoring:
+  enabled: true
+  data_capture:
+    enabled: true
+    sample_rate: 0.1
+    max_request_size: 1048576
+  model_monitoring:
+    enabled: true
+    type: "default"
+
+service:
+  name: "used_car_price_service"
+  envs:
+    - name: "MODEL_VERSION"
+      value: "latest"
+    - name: "CONFIDENCE_THRESHOLD"
+      value: "0.1"
+    - name: "MAX_BATCH_SIZE"
+      value: "1000"
+    - name: "CURRENT_YEAR"
+      value: "2025"
+    - name: "LOG_LEVEL"
+      value: "INFO"
+
+development:
+  reload: false
+  reload_delay: 1.0
+
+# Health check configuration
+health_check:
+  enabled: true
+  timeout: 30
+  interval: 60
+  path: "/health"
+
+# Additional configuration for production deployment
+deployment:
+  container:
+    # Resource limits for containerized deployment
+    resources:
+      requests:
+        cpu: "500m"
+        memory: "1Gi"
+      limits:
+        cpu: "2000m"
+        memory: "4Gi"
+
+    # Health and readiness probes
+    health_probe:
+      enabled: true
+      path: "/health"
+      initial_delay: 30
+      period: 10
+      timeout: 5
+      failure_threshold: 3
+    
+    readiness_probe:
+      enabled: true
+      path: "/health"
+      initial_delay: 5
+      period: 5
+      timeout: 3
+      failure_threshold: 3
+
+# Security settings (for production)
+security:
+  # Enable for authentication
+  authentication:
+    enabled: false
+    # type: "jwt"
+    # secret_key: "your-secret-key"
+
+  # Rate limiting
+  rate_limiting:
+    enabled: false  # Enable in production
+    # requests_per_minute: 100
+    # burst_size: 10
+
+# Model-specific configuration
+model:
+  # Configuration for LinearRegression model
+  prediction:
+    confidence_threshold: 0.1
+    max_prediction_value: 1000000  # $1M max car price
+    min_prediction_value: 100      # $100 min car price
+  
+  # Feature validation
+  features:
+    validate_input: true
+    normalize_features: true
+  
+  # Batch processing limits
+  batch:
+    max_size: 1000
+    timeout_seconds: 600
+    parallel_processing: true
+
