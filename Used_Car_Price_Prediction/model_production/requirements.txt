@@ -1,0 +1,20 @@
+# Streamlit Core
+streamlit
+pydantic
+pydantic-settings
+
+# Data Processing
+pandas
+numpy
+scikit-learn
+joblib
+
+# Visualization
+plotly
+
+# HTTP Client (for API calls)
+requests
+
+# Utilities
+python-dotenv
+loguru
