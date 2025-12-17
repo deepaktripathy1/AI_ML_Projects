@@ -1,13 +1,19 @@
 """Main streamlit application for Used Car Price Prediction."""
 
+# fmt: off
+# isort: skip_file
 import base64
+import sys
 from pathlib import Path
+
+parent_dir = Path(__file__).parent.parent
+sys.path.insert(0, str(parent_dir))
 
 import streamlit as st
 from app_components.data_viewer import DataViewer
 from app_components.prediction_interface import PredictionInterface
 from config.config import get_settings
-
+# fmt: on
 
 # Page configuration
 st.set_page_config(

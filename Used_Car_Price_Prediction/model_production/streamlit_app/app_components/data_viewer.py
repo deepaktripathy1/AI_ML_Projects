@@ -1,5 +1,13 @@
 """Data viewer component for analytics and model insights."""
 
+# fmt: off
+# isort: skip_file
+import sys
+from pathlib import Path
+
+parent_dir = Path(__file__).parent.parent
+sys.path.insert(0, str(parent_dir))
+
 from typing import Any, Dict, Optional
 import json
 import os
@@ -12,6 +20,7 @@ import requests
 import streamlit as st
 
 from config.config import get_settings
+# fmt: on
 
 
 class DataViewer:

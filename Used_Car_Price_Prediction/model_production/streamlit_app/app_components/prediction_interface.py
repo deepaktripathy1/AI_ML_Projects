@@ -1,5 +1,13 @@
 """Prediction interface for the Streamlit application."""
 
+# fmt: off
+# isort: skip_file
+import sys
+from pathlib import Path
+
+parent_dir = Path(__file__).parent.parent
+sys.path.insert(0, str(parent_dir))
+
 from datetime import datetime
 from typing import Any, Dict, Optional
 
@@ -10,6 +18,7 @@ import streamlit as st
 
 from config.config import get_settings
 from src.utils.model_loader import get_model_loader
+# fmt: on
 
 
 class PredictionInterface:
