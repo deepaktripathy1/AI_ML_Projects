@@ -1,0 +1,296 @@
+{
+  "report_metadata": {
+    "generation_timestamp": "2025-10-23T21:29:34.183347",
+    "flow_run_id": "a0616f25-41e3-4d51-a976-7419bbc5c67b",
+    "flow_run_name": "training-pipeline-20251023-211204",
+    "triggered_by": "used_car_price_data_pipeline",
+    "trigger_type": "automatic",
+    "feature_store_type": "Unknown"
+  },
+  "training_summary": {
+    "training_status": "SUCCESS",
+    "model_type": "LinearRegression",
+    "training_timestamp": "2025-10-23T21:29:11.854858",
+    "model_path": "C:\\Users\\deepak\\Documents\\AI-ML\\Projects\\AI_ML_Projects\\Used_Car_Price_Prediction\\model_production\\models\\linear_regression_20251023_212928\\model.pkl",
+    "results_path": "\\tmp\\training_results.json",
+    "triggered_by_external": true,
+    "test_rmse": 1025.0796926190005,
+    "test_mape": 14.317153699935476,
+    "test_r2": 0.8641719022448561,
+    "overfitting_risk": "low"
+  },
+  "validation_summary": {
+    "model_accepted": true,
+    "validation_checks": {
+      "model_saved": true,
+      "training_successful": true,
+      "performance_acceptable": true,
+      "validation_passed": true,
+      "external_trigger_success": true
+    },
+    "validation_timestamp": "2025-10-23T21:29:32.767768",
+    "model_path": "C:\\Users\\deepak\\Documents\\AI-ML\\Projects\\AI_ML_Projects\\Used_Car_Price_Prediction\\model_production\\models\\linear_regression_20251023_212928\\model.pkl",
+    "recommendations": [
+      "High MAPE indicates prediction errors - consider data quality review",
+      "Consider additional feature selection to reduce model complexity"
+    ],
+    "trigger_info": {}
+  },
+  "full_training_results": {
+    "training_timestamp": "2025-10-23T21:29:11.854858",
+    "model_type": "LinearRegression",
+    "training_metrics": {
+      "train_mse": 980296.8774798185,
+      "train_mae": 788.3607436533874,
+      "train_r2": 0.8670669337942222,
+      "train_rmse": 990.0994280777151,
+      "test_mse": 1050788.3762198645,
+      "test_mae": 815.9428305813946,
+      "test_r2": 0.8641719022448561,
+      "test_rmse": 1025.0796926190005,
+      "train_mape": 14.050980208720038,
+      "test_mape": 14.317153699935476,
+      "train_residual_std": 990.0994280777151,
+      "test_residual_std": 1024.8271445369521,
+      "cv_mean_rmse": 993.2127645134093,
+      "cv_std_rmse": 191.03256308114078,
+      "cv_scores": [
+        -990197.1882851969,
+        -1047807.8955540454,
+        -949475.1336511206,
+        -948771.7961107552,
+        -996105.9643607268
+      ]
+    },
+    "validation_results": {
+      "thresholds": {
+        "max_rmse": 10000,
+        "min_r2": 0.7,
+        "max_mape": 15,
+        "max_cv_std": 1000
+      },
+      "checks": {
+        "rmse_check": {
+          "value": 1025.0796926190005,
+          "threshold": 10000,
+          "passed": "True"
+        },
+        "r2_check": {
+          "value": 0.8641719022448561,
+          "threshold": 0.7,
+          "passed": true
+        },
+        "mape_check": {
+          "value": 14.317153699935476,
+          "threshold": 15,
+          "passed": "True"
+        }
+      },
+      "overall_passed": true,
+      "diagnostics": {
+        "residual_analysis": {
+          "train_residual_mean": 3.907303666995319e-13,
+          "test_residual_mean": 22.753022658571094,
+          "train_residual_skewness": 0.03277512968626921,
+          "test_residual_skewness": -0.04256842663984603
+        },
+        "feature_importance": {
+          "top_5_features": [
+            {
+              "feature": "engine_cc",
+              "abs_coefficient": 1890.3093103481965
+            },
+            {
+              "feature": "car_age",
+              "abs_coefficient": 1239.0816962270967
+            },
+            {
+              "feature": "fuel_type_electric",
+              "abs_coefficient": 879.4674256760335
+            },
+            {
+              "feature": "owner_count",
+              "abs_coefficient": 689.0628305606662
+            },
+            {
+              "feature": "mileage_kmpl",
+              "abs_coefficient": 587.6069766980327
+            }
+          ],
+          "feature_count": 25,
+          "max_coefficient": 1890.3093103481965,
+          "min_coefficient": 0.6311627324620872
+        },
+        "prediction_analysis": {
+          "train_pred_min": 308.7435007599397,
+          "train_pred_max": 16067.619202949085,
+          "test_pred_min": 1464.3401951886963,
+          "test_pred_max": 15965.464500573698,
+          "train_actual_range": 13701.4,
+          "test_actual_range": 13576.06
+        }
+      }
+    },
+    "model_info": {
+      "status": "trained",
+      "model_type": "LinearRegression",
+      "normalize_features": true,
+      "n_features": 25,
+      "feature_names": [
+        "mileage_kmpl",
+        "engine_cc",
+        "owner_count",
+        "car_age",
+        "has_accident",
+        "service_history_encoded",
+        "fuel_type_electric",
+        "fuel_type_petrol",
+        "brand_chevrolet",
+        "brand_ford",
+        "brand_honda",
+        "brand_hyundai",
+        "brand_kia",
+        "brand_nissan",
+        "brand_tesla",
+        "brand_toyota",
+        "brand_volkswagen",
+        "transmission_manual",
+        "color_blue",
+        "color_gray",
+        "color_red",
+        "color_silver",
+        "color_white",
+        "insurance_valid_yes",
+        "car_id"
+      ],
+      "training_metrics": {
+        "train_mse": 980296.8774798185,
+        "train_mae": 788.3607436533874,
+        "train_r2": 0.8670669337942222,
+        "train_rmse": 990.0994280777151,
+        "test_mse": 1050788.3762198645,
+        "test_mae": 815.9428305813946,
+        "test_r2": 0.8641719022448561,
+        "test_rmse": 1025.0796926190005,
+        "train_mape": 14.050980208720038,
+        "test_mape": 14.317153699935476,
+        "train_residual_std": 990.0994280777151,
+        "test_residual_std": 1024.8271445369521,
+        "cv_mean_rmse": 993.2127645134093,
+        "cv_std_rmse": 191.03256308114078,
+        "cv_scores": [
+          -990197.1882851969,
+          -1047807.8955540454,
+          -949475.1336511206,
+          -948771.7961107552,
+          -996105.9643607268
+        ]
+      },
+      "metadata": {
+        "model_type": "LinearRegression",
+        "training_timestamp": "2025-10-23T21:15:14.626037",
+        "feature_names": [
+          "mileage_kmpl",
+          "engine_cc",
+          "owner_count",
+          "car_age",
+          "has_accident",
+          "service_history_encoded",
+          "fuel_type_electric",
+          "fuel_type_petrol",
+          "brand_chevrolet",
+          "brand_ford",
+          "brand_honda",
+          "brand_hyundai",
+          "brand_kia",
+          "brand_nissan",
+          "brand_tesla",
+          "brand_toyota",
+          "brand_volkswagen",
+          "transmission_manual",
+          "color_blue",
+          "color_gray",
+          "color_red",
+          "color_silver",
+          "color_white",
+          "insurance_valid_yes",
+          "car_id"
+        ],
+        "n_features": 25,
+        "n_training_samples": 7821,
+        "training_metrics": {
+          "train_mse": 980296.8774798185,
+          "train_mae": 788.3607436533874,
+          "train_r2": 0.8670669337942222,
+          "train_rmse": 990.0994280777151,
+          "test_mse": 1050788.3762198645,
+          "test_mae": 815.9428305813946,
+          "test_r2": 0.8641719022448561,
+          "test_rmse": 1025.0796926190005,
+          "train_mape": 14.050980208720038,
+          "test_mape": 14.317153699935476,
+          "train_residual_std": 990.0994280777151,
+          "test_residual_std": 1024.8271445369521,
+          "cv_mean_rmse": 993.2127645134093,
+          "cv_std_rmse": 191.03256308114078,
+          "cv_scores": [
+            -990197.1882851969,
+            -1047807.8955540454,
+            -949475.1336511206,
+            -948771.7961107552,
+            -996105.9643607268
+          ]
+        }
+      }
+    },
+    "training_status": "SUCCESS",
+    "performance_summary": {
+      "test_rmse": 1025.0796926190005,
+      "test_r2": 0.8641719022448561,
+      "test_mape": 14.317153699935476,
+      "cv_rmse_mean": 0,
+      "overfitting_risk": "low"
+    },
+    "recommendations": [
+      "High MAPE indicates prediction errors - consider data quality review",
+      "Consider additional feature selection to reduce model complexity"
+    ],
+    "shap_results": {
+      "explainer_type": "LinearExplainer",
+      "n_samples_explained": 1957,
+      "top_features": [
+        {
+          "feature": "engine_cc",
+          "shap_importance": 1557.944331190425
+        },
+        {
+          "feature": "car_age",
+          "shap_importance": 1066.114144783911
+        },
+        {
+          "feature": "owner_count",
+          "shap_importance": 580.8363238453641
+        },
+        {
+          "feature": "fuel_type_electric",
+          "shap_importance": 475.4091001486828
+        },
+        {
+          "feature": "mileage_kmpl",
+          "shap_importance": 473.8639478350347
+        }
+      ],
+      "mean_abs_shap": 175.74666302927702
+    },
+    "model_path": "C:\\Users\\deepak\\Documents\\AI-ML\\Projects\\AI_ML_Projects\\Used_Car_Price_Prediction\\model_production\\models\\linear_regression_20251023_212928\\model.pkl"
+  },
+  "model_readiness": {
+    "ready_for_deployment": true,
+    "deployment_blockers": []
+  },
+  "pipeline_integration": {
+    "data_pipeline_triggered": true,
+    "automatic_trigger_success": true,
+    "trigger_info": {}
+  }
+}

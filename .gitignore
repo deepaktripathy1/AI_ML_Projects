@@ -135,12 +135,13 @@ used_car_price_prediction/model_training/models/
 # ----------------------------------------
 # Logs and outputs
 # ----------------------------------------
-logs/
-**/logs/
+logs/app.log
+**/logs/app.log
 !logs/drift_reports/
 !logs/monitoring_reports/
 !logs/training_report.json
-*.log
+logs/*.log
+logs/**/*.log
 hydra_output/
 used_car_price_prediction/model_training/logs/
 used_car_price_prediction/model_training/hydra_output/

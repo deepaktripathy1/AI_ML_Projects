@@ -1,0 +1,220 @@
+{
+  "drift_analysis_completed": true,
+  "drift_results": {
+    "timestamp": "2025-11-13T21:53:22.200933",
+    "dataset_drift_detected": true,
+    "drift_score": 0.64,
+    "drifted_features": [
+      "mileage_kmpl",
+      "engine_cc",
+      "owner_count",
+      "has_accident",
+      "car_age",
+      "service_history_encoded",
+      "price_usd",
+      "fuel_type_electric",
+      "brand_honda",
+      "brand_tesla",
+      "brand_volkswagen",
+      "transmission_manual",
+      "color_blue",
+      "color_silver",
+      "color_white",
+      "insurance_valid_yes"
+    ],
+    "drift_details": {
+      "mileage_kmpl": {
+        "drift_score": 0.0037316713505418566,
+        "drift_detected": true
+      },
+      "engine_cc": {
+        "drift_score": 4.4883589997654347e-05,
+        "drift_detected": true
+      },
+      "owner_count": {
+        "drift_score": 3.105499617539898e-40,
+        "drift_detected": true
+      },
+      "has_accident": {
+        "drift_score": 1.5959910504292907e-08,
+        "drift_detected": true
+      },
+      "car_age": {
+        "drift_score": 3.3802489350670517e-40,
+        "drift_detected": true
+      },
+      "service_history_encoded": {
+        "drift_score": 1.6927881973241562e-07,
+        "drift_detected": true
+      },
+      "price_usd": {
+        "drift_score": 1.4055138003704013e-144,
+        "drift_detected": true
+      },
+      "fuel_type_electric": {
+        "drift_score": 5.463549041184734e-06,
+        "drift_detected": true
+      },
+      "fuel_type_petrol": {
+        "drift_score": 0.07934259793831178,
+        "drift_detected": false
+      },
+      "brand_chevrolet": {
+        "drift_score": 0.059831221556611025,
+        "drift_detected": false
+      },
+      "brand_ford": {
+        "drift_score": 0.7140043444423188,
+        "drift_detected": false
+      },
+      "brand_honda": {
+        "drift_score": 0.040293193450225084,
+        "drift_detected": true
+      },
+      "brand_hyundai": {
+        "drift_score": 0.12822761535689398,
+        "drift_detected": false
+      },
+      "brand_kia": {
+        "drift_score": 0.48442336471277603,
+        "drift_detected": false
+      },
+      "brand_nissan": {
+        "drift_score": 0.2175644593563164,
+        "drift_detected": false
+      },
+      "brand_tesla": {
+        "drift_score": 0.04045033971582179,
+        "drift_detected": true
+      },
+      "brand_toyota": {
+        "drift_score": 0.4418790875167087,
+        "drift_detected": false
+      },
+      "brand_volkswagen": {
+        "drift_score": 0.006489482831297355,
+        "drift_detected": true
+      },
+      "transmission_manual": {
+        "drift_score": 6.477542711991191e-06,
+        "drift_detected": true
+      },
+      "color_blue": {
+        "drift_score": 0.002130190984656055,
+        "drift_detected": true
+      },
+      "color_gray": {
+        "drift_score": 0.25069584232924136,
+        "drift_detected": false
+      },
+      "color_red": {
+        "drift_score": 0.1187551590229945,
+        "drift_detected": false
+      },
+      "color_silver": {
+        "drift_score": 0.028573862287049057,
+        "drift_detected": true
+      },
+      "color_white": {
+        "drift_score": 5.324186889144045e-07,
+        "drift_detected": true
+      },
+      "insurance_valid_yes": {
+        "drift_score": 0.0008491782516251156,
+        "drift_detected": true
+      }
+    },
+    "data_quality_issues": []
+  },
+  "model_results": {
+    "timestamp": "2025-11-13T21:53:27.150486",
+    "performance_degradation": true,
+    "prediction_drift_detected": true,
+    "current_metrics": {
+      "mean_error": 3640.0695044978042,
+      "mape": 5.0000000000000036,
+      "rmse": 3669.851594224425,
+      "mae": 3640.0695044978042,
+      "r2_score": 0.8453431516212644
+    },
+    "reference_metrics": {
+      "mean_error": -141.85097060000012,
+      "mape": 2.0000000000000013,
+      "rmse": 152.00428072954574,
+      "mae": 141.85097060000012,
+      "r2_score": 0.9969023630169979
+    },
+    "performance_change": {
+      "r2_change": -0.15155921139573347,
+      "mae_change": 3498.2185338978043
+    },
+    "drift_details": {
+      "tests": [
+        {
+          "metric_id": "eb50f621dc9ac96982148a761b11eaa7",
+          "status": "TestStatus.FAIL",
+          "name": "Mean Error: Equal Reference \u00b1 14.185",
+          "description": "Mean Error: Actual value 3640.070 , but expected -141.851 \u00b1 14.185"
+        },
+        {
+          "metric_id": "5aa32fd1e3c5da1cd47cbc5f7ab4372d",
+          "status": "TestStatus.FAIL",
+          "name": "Mean Absolute Percentage Error: Equal Reference \u00b1 0.200",
+          "description": "Mean Absolute Percentage Error: Actual value 5.000 , but expected 2.000 \u00b1 0.200"
+        },
+        {
+          "metric_id": "07a6d46c093f8fd4d3fd9a8f834e0446",
+          "status": "TestStatus.FAIL",
+          "name": "RMSE: Equal Reference \u00b1 15.200",
+          "description": "RMSE: Actual value 3669.852 , but expected 152.004 \u00b1 15.200"
+        },
+        {
+          "metric_id": "388a1f90d7785053ba4b44301e310cf2",
+          "status": "TestStatus.FAIL",
+          "name": "Mean Absolute Error: Equal Reference \u00b1 14.185",
+          "description": "Mean Absolute Error: Actual value 3640.070 , but expected 141.851 \u00b1 14.185"
+        },
+        {
+          "metric_id": "9c7e7b78ceb0ed9bc65fd16a8cca6237",
+          "status": "TestStatus.FAIL",
+          "name": "R2 Score: Equal Reference \u00b1 0.100",
+          "description": "R2 Score: Actual value 0.845 , but expected 0.997 \u00b1 0.100"
+        },
+        {
+          "metric_id": "d2ac9457e6d5eacc29f1a47de21d9d45",
+          "status": "TestStatus.FAIL",
+          "name": "Absolute Max Error: Equal Reference \u00b1 29.326",
+          "description": "Absolute Max Error: Actual value 5188.181 , but expected 293.257 \u00b1 29.326"
+        }
+      ]
+    },
+    "test_failures": [
+      {
+        "name": "Mean Error: Equal Reference \u00b1 14.185",
+        "description": "Mean Error: Actual value 3640.070 , but expected -141.851 \u00b1 14.185"
+      },
+      {
+        "name": "Mean Absolute Percentage Error: Equal Reference \u00b1 0.200",
+        "description": "Mean Absolute Percentage Error: Actual value 5.000 , but expected 2.000 \u00b1 0.200"
+      },
+      {
+        "name": "RMSE: Equal Reference \u00b1 15.200",
+        "description": "RMSE: Actual value 3669.852 , but expected 152.004 \u00b1 15.200"
+      },
+      {
+        "name": "Mean Absolute Error: Equal Reference \u00b1 14.185",
+        "description": "Mean Absolute Error: Actual value 3640.070 , but expected 141.851 \u00b1 14.185"
+      },
+      {
+        "name": "R2 Score: Equal Reference \u00b1 0.100",
+        "description": "R2 Score: Actual value 0.845 , but expected 0.997 \u00b1 0.100"
+      },
+      {
+        "name": "Absolute Max Error: Equal Reference \u00b1 29.326",
+        "description": "Absolute Max Error: Actual value 5188.181 , but expected 293.257 \u00b1 29.326"
+      }
+    ]
+  },
+  "analysis_timestamp": "2025-11-13T21:53:27.151487",
+  "records_analyzed": 100
+}

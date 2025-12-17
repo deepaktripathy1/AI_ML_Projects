@@ -1,0 +1,92 @@
+{
+  "export_timestamp": "2025-11-13T21:53:32.078149",
+  "prediction_summary_24h": {
+    "total_predictions": 0,
+    "avg_prediction_value": 0,
+    "avg_confidence": 0,
+    "avg_latency_ms": 0
+  },
+  "drift_summary": {
+    "last_check": "2025-11-13T21:53:32.069146",
+    "data_drift_detected": true,
+    "model_drift_detected": true,
+    "prediction_drift_detected": true,
+    "drift_score": 0.64,
+    "drifted_features": [
+      "mileage_kmpl",
+      "engine_cc",
+      "owner_count",
+      "has_accident",
+      "car_age",
+      "service_history_encoded",
+      "price_usd",
+      "fuel_type_electric",
+      "brand_honda",
+      "brand_tesla",
+      "brand_volkswagen",
+      "transmission_manual",
+      "color_blue",
+      "color_silver",
+      "color_white",
+      "insurance_valid_yes"
+    ],
+    "drifted_features_count": 16,
+    "failed_tests": 6,
+    "total_checks": 1
+  },
+  "recent_predictions": [],
+  "recent_drift_checks": [
+    {
+      "timestamp": "2025-11-13T21:53:32.069146",
+      "data_drift_detected": true,
+      "drift_score": 0.64,
+      "drifted_features": [
+        "mileage_kmpl",
+        "engine_cc",
+        "owner_count",
+        "has_accident",
+        "car_age",
+        "service_history_encoded",
+        "price_usd",
+        "fuel_type_electric",
+        "brand_honda",
+        "brand_tesla",
+        "brand_volkswagen",
+        "transmission_manual",
+        "color_blue",
+        "color_silver",
+        "color_white",
+        "insurance_valid_yes"
+      ],
+      "model_drift_detected": true,
+      "failed_tests": 6
+    }
+  ],
+  "feature_drift_scores": {
+    "mileage_kmpl": 0.0037316713505418566,
+    "engine_cc": 4.4883589997654347e-05,
+    "owner_count": 3.105499617539898e-40,
+    "has_accident": 1.5959910504292907e-08,
+    "car_age": 3.3802489350670517e-40,
+    "service_history_encoded": 1.6927881973241562e-07,
+    "price_usd": 1.4055138003704013e-144,
+    "fuel_type_electric": 5.463549041184734e-06,
+    "fuel_type_petrol": 0.07934259793831178,
+    "brand_chevrolet": 0.059831221556611025,
+    "brand_ford": 0.7140043444423188,
+    "brand_honda": 0.040293193450225084,
+    "brand_hyundai": 0.12822761535689398,
+    "brand_kia": 0.48442336471277603,
+    "brand_nissan": 0.2175644593563164,
+    "brand_tesla": 0.04045033971582179,
+    "brand_toyota": 0.4418790875167087,
+    "brand_volkswagen": 0.006489482831297355,
+    "transmission_manual": 6.477542711991191e-06,
+    "color_blue": 0.002130190984656055,
+    "color_gray": 0.25069584232924136,
+    "color_red": 0.1187551590229945,
+    "color_silver": 0.028573862287049057,
+    "color_white": 5.324186889144045e-07,
+    "insurance_valid_yes": 0.0008491782516251156
+  }
+}
