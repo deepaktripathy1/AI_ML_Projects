@@ -1,0 +1,40 @@
+name: Qdrant Keep-Alive (cURL)
+
+on:
+  schedule:
+    # Runs every Monday at 08:00 AM UTC (Prevents the 1-week inactivity suspension)
+    - cron: '0 8 * * 1'
+  workflow_dispatch: # Allows manual triggering from the Actions tab for testing
+
+jobs:
+  ping-qdrant:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send HTTP Ping to Qdrant
+        env:
+          QDRANT_URL: ${{ secrets.QDRANT_URL }}
+          QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
+        run: |
+          echo "Pinging Qdrant collection endpoint..."
+          
+          # Perform the request and capture both the body and HTTP status code
+          RESPONSE=$(curl -s -w "%{http_code}" -X GET "$QDRANT_URL/collections" \
+            -H "api-key: $QDRANT_API_KEY")
+          
+          # Extract the last 3 characters as the HTTP status code
+          HTTP_STATUS="${RESPONSE: -3}"
+          BODY="${RESPONSE%???}"
+          
+          echo "HTTP Status Code: $HTTP_STATUS"
+          
+          # Check if the request was successful (200 OK)
+          if [ "$HTTP_STATUS" -eq 200 ]; then
+            echo "Successfully pinged Qdrant cluster!"
+            echo "Collections response summary:"
+            echo "$BODY" | head -c 200
+            echo "..."
+          else
+            echo "Error: Failed to ping Qdrant cluster. Received status code $HTTP_STATUS"
+            echo "Response body: $BODY"
+            exit 1
+          fi
