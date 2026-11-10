@@ -1,0 +1,15 @@
+name: Cognee Keep Alive
+
+on:
+  schedule:
+    - cron: '0 9 */3 * *'
+
+  workflow_dispatch:
+
+jobs:
+  ping-cognee:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Ping Request
+        run: |
+          curl -s -o /dev/null -w "%{http_code}" "${{ secrets.PING_TARGET_URL }}"
