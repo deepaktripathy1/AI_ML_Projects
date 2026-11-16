@@ -1,0 +1,48 @@
+name: Redis Cloud Keep Alive
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"  # Every Monday at 06:00 UTC
+  workflow_dispatch:
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Redis client
+        run: pip install redis
+
+      - name: Keep Redis Cloud database active
+        env:
+          REDIS_URL: ${{ secrets.REDIS_URL }}
+        run: |
+          python - <<'PY'
+          import os
+          from datetime import datetime, timezone
+          import redis
+
+          client = redis.Redis.from_url(
+              os.environ["REDIS_URL"],
+              decode_responses=True
+          )
+
+          key = "hr_analytics:keepalive"
+          value = datetime.now(timezone.utc).isoformat()
+
+          client.set(key, value, ex=60 * 60 * 24 * 30)
+
+          result = client.get(key)
+
+          if result != value:
+              raise RuntimeError("Redis keepalive verification failed")
+
+          print(f"Redis Cloud keepalive successful: {result}")
+
+          client.close()
+          PY
